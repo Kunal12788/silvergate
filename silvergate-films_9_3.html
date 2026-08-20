@@ -1365,7 +1365,8 @@
 
 <div class="panel" id="panel-1" data-panel="1">
 <section class="hero" id="heroSection">
-  <video class="hero-video" autoplay muted loop playsinline poster="">
+  <video class="hero-video" autoplay muted loop playsinline preload="auto" poster="">
+    <source src="videos/hero_background.mp4" type="video/mp4">
     <source src="https://assets.mixkit.co/videos/49354/49354-360.mp4" type="video/mp4">
   </video>
   <div class="hero-noise"></div>
@@ -1373,7 +1374,7 @@
   <div class="frame-corners"><i></i><i></i><i></i><i></i></div>
   <div class="letterbox top"></div>
   <div class="letterbox bottom"></div>
-  <div class="wrap hero-inner reveal">
+  <div class="wrap hero-inner">
 
     <h1>STORIES SO GOOD<br>THEY STOP THE SCROLL.</h1>
     <p class="hero-sub">Silvergate Films is the independent studio brands call when "pretty good" isn't good enough. Features, commercials, and everything that deserves twenty-four frames a second.</p>
@@ -2546,11 +2547,10 @@
     });
   }
 
-  // Trigger on page load / DOM ready
-  if (document.readyState === 'complete' || document.readyState === 'interactive') {
-    setTimeout(animateStats, 100);
-  } else {
-    window.addEventListener('load', animateStats);
+  // Trigger on page load / DOM ready immediately without waiting for heavy video loads
+  animateStats();
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', animateStats);
   }
 
   // Re-trigger count-up whenever user lands on Panel 1
@@ -2558,11 +2558,11 @@
   if (panel1El && 'IntersectionObserver' in window) {
     const p1Observer = new IntersectionObserver((entries)=>{
       entries.forEach(e=>{
-        if (e.isIntersecting && e.intersectionRatio > 0.3) {
+        if (e.isIntersecting && e.intersectionRatio > 0.2) {
           animateStats();
         }
       });
-    }, { root: snapContainer, threshold: [0.3] });
+    }, { root: snapContainer, threshold: [0.2] });
     p1Observer.observe(panel1El);
   }
 
