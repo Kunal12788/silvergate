@@ -80,6 +80,187 @@
   .fullnav-foot{display:flex;justify-content:space-between;margin-top:clamp(20px, 4vh, 50px);font-family:'IBM Plex Mono',monospace;font-size:12px;color:var(--slate);flex-wrap:wrap;gap:16px;}
   .fullnav-foot a:hover{color:var(--gold);}
 
+  /* ================= MODERN HIGH-END CINEMATIC INTRO ================= */
+  .intro-screen{
+    position:fixed;inset:0;z-index:99999;
+    background:#070605;
+    display:flex;flex-direction:column;align-items:center;justify-content:center;
+    overflow:hidden;
+    perspective:1200px;
+    transition:opacity 0.9s cubic-bezier(0.77, 0, 0.175, 1), transform 0.9s cubic-bezier(0.77, 0, 0.175, 1), filter 0.8s var(--ease);
+  }
+  .intro-screen.hide{
+    opacity:0;
+    transform:scale(1.08) translateY(-40px);
+    filter:blur(14px);
+    pointer-events:none;
+  }
+  .intro-canvas{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;z-index:2;}
+  .intro-vignette{
+    position:absolute;inset:0;z-index:3;pointer-events:none;
+    background:radial-gradient(ellipse 90% 80% at 50% 50%, rgba(140,28,19,.18) 0%, rgba(7,6,5,.75) 60%, #070605 100%);
+  }
+
+
+  /* HUD Top Bar */
+  .intro-hud-top{
+    position:absolute;top:28px;left:36px;right:36px;
+    display:flex;justify-content:space-between;align-items:center;
+    font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.2em;
+    color:var(--slate);z-index:10;pointer-events:none;
+    opacity:0;transform:translateY(-10px);
+    animation:introFadeDown 0.8s 0.2s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  }
+  .hud-rec{display:flex;align-items:center;gap:8px;color:rgba(237,230,214,.7);}
+  .rec-dot{width:7px;height:7px;border-radius:50%;background:#e53e3e;box-shadow:0 0 10px #e53e3e;animation:recBlink 1s infinite alternate;}
+  @keyframes recBlink{from{opacity:0.3;}to{opacity:1;}}
+  .hud-timecode{color:var(--gold);font-variant-numeric:tabular-nums;}
+
+  /* Main Intro Content Group */
+  .intro-content{
+    position:relative;z-index:10;text-align:center;
+    display:flex;flex-direction:column;align-items:center;gap:20px;
+    padding:0 24px;transform-style:preserve-3d;
+    transition:transform 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  .intro-badge{
+    display:flex;align-items:center;gap:14px;
+    font-family:'IBM Plex Mono',monospace;font-size:10.5px;letter-spacing:.28em;
+    color:var(--gold);text-transform:uppercase;
+    opacity:0;transform:translateY(12px);
+    animation:introFadeUp 0.8s 0.25s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  }
+  .badge-line{width:32px;height:1px;background:linear-gradient(90deg, transparent, var(--gold));}
+  .badge-line:last-child{background:linear-gradient(90deg, var(--gold), transparent);}
+
+  /* Kinetic Staggered Logo Title */
+  .intro-title{
+    font-family:'Bebas Neue',sans-serif;
+    font-size:clamp(54px, 11vw, 135px);
+    line-height:0.9;
+    letter-spacing:0.16em;
+    color:var(--cream);
+    display:flex;align-items:center;justify-content:center;gap:18px;flex-wrap:wrap;
+    perspective:800px;
+  }
+  .intro-word-group{display:inline-flex;align-items:center;}
+  .k-char{
+    display:inline-block;
+    opacity:0;
+    transform:translateY(65px) rotateX(-70deg) scale(0.85);
+    filter:blur(10px);
+    animation:kineticCharIn 0.85s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    animation-delay:calc(0.35s + var(--i) * 0.055s);
+  }
+  .intro-silver .k-char{
+    color:var(--cream);
+    background:linear-gradient(135deg, #ffffff 0%, #ede6d6 60%, #ded7c4 100%);
+    -webkit-background-clip:text;
+    -webkit-text-fill-color:transparent;
+  }
+  .intro-gate .k-char{
+    color:var(--gold);
+    background:linear-gradient(135deg, #ffd984 0%, #d8a24a 55%, #b8860b 100%);
+    -webkit-background-clip:text;
+    -webkit-text-fill-color:transparent;
+    text-shadow:0 0 25px rgba(216,162,74,0.3);
+  }
+  @keyframes kineticCharIn{
+    to{
+      opacity:1;
+      transform:translateY(0) rotateX(0deg) scale(1);
+      filter:blur(0px);
+    }
+  }
+
+  /* Tag group with Audio Equalizer */
+  .intro-tag-group{
+    display:inline-flex;align-items:center;gap:10px;
+    opacity:0;transform:scale(0.85);
+    animation:introFadeUp 0.8s 0.9s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  }
+  .intro-films-tag{
+    font-family:'IBM Plex Mono',monospace;
+    font-size:clamp(12px, 1.8vw, 18px);
+    font-weight:700;letter-spacing:.22em;
+    padding:6px 14px;border-radius:6px;
+    background:rgba(216,162,74,0.12);
+    border:1px solid rgba(216,162,74,0.45);
+    color:var(--gold);
+    box-shadow:0 0 20px rgba(216,162,74,0.25), inset 0 1px 0 rgba(255,255,255,0.15);
+  }
+  .intro-eq{display:flex;align-items:flex-end;gap:3px;height:16px;}
+  .eq-bar{
+    width:3px;height:100%;background:var(--gold);border-radius:1px;
+    animation:eqPulse 1s ease-in-out infinite alternate;
+  }
+  .eq-bar:nth-child(1){animation-delay:0.1s;height:30%;}
+  .eq-bar:nth-child(2){animation-delay:0.35s;height:80%;}
+  .eq-bar:nth-child(3){animation-delay:0.15s;height:100%;}
+  .eq-bar:nth-child(4){animation-delay:0.45s;height:60%;}
+  .eq-bar:nth-child(5){animation-delay:0.25s;height:40%;}
+  @keyframes eqPulse{
+    0%{transform:scaleY(0.25);}
+    100%{transform:scaleY(1);}
+  }
+
+  /* Progress & Percent Bar */
+  .intro-progress-wrap{
+    display:flex;align-items:center;gap:12px;
+    margin-top:6px;opacity:0;
+    animation:introFadeUp 0.6s 0.75s forwards;
+  }
+  .intro-progress-bar{
+    width:240px;height:3px;
+    background:rgba(237,230,214,.1);
+    border-radius:99px;overflow:hidden;
+    box-shadow:inset 0 1px 2px rgba(0,0,0,0.6);
+  }
+  .intro-progress-fill{
+    width:0%;height:100%;
+    background:linear-gradient(90deg, #b8860b, var(--gold), #ffffff);
+    box-shadow:0 0 14px var(--gold);
+    transition:width 2.1s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  .intro-progress-pct{
+    font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.1em;
+    color:var(--gold);font-variant-numeric:tabular-nums;min-width:36px;text-align:right;
+  }
+
+  /* Meta Specs Footer */
+  .intro-meta{
+    display:flex;align-items:center;gap:12px;
+    font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.22em;
+    color:var(--slate);opacity:0;
+    animation:introFadeUp 0.8s 0.85s forwards;
+    flex-wrap:wrap;justify-content:center;
+  }
+  .meta-sep{color:rgba(216,162,74,0.5);}
+
+  /* Skip/Enter Button */
+  .intro-skip{
+    position:absolute;bottom:32px;right:36px;z-index:20;
+    background:rgba(18,15,14,0.85);
+    backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);
+    border:1px solid rgba(216,162,74,.35);
+    color:var(--cream);
+    font-family:'IBM Plex Mono',monospace;font-size:10.5px;letter-spacing:.16em;
+    padding:9px 18px;border-radius:999px;cursor:pointer;
+    display:inline-flex;align-items:center;gap:8px;
+    transition:all .35s cubic-bezier(0.16, 1, 0.3, 1);
+    opacity:0;animation:introFadeUp 0.8s 1s forwards;
+    box-shadow:0 8px 24px rgba(0,0,0,0.5);
+  }
+  .intro-skip:hover{
+    color:var(--ink);background:var(--gold);border-color:var(--gold);
+    box-shadow:0 0 25px rgba(216,162,74,0.5);transform:translateY(-2px) scale(1.03);
+  }
+  .intro-skip svg{transition:transform .3s var(--ease);}
+  .intro-skip:hover svg{transform:translateX(3px);}
+
+  @keyframes introFadeUp{to{opacity:1;transform:translateY(0);}}
+  @keyframes introFadeDown{to{opacity:1;transform:translateY(0);}}
+
   /* ================= HERO ================= */
   .hero{
     height:calc(100vh - 270px);min-height:360px;
@@ -1361,6 +1542,75 @@
   <button data-panel="10" data-label="Contact" aria-label="Go to Contact"></button>
 </div>
 
+<!-- High-End Cinematic Intro Splash Screen -->
+<div class="intro-screen" id="introScreen">
+  <canvas id="introCanvas" class="intro-canvas"></canvas>
+  <div class="intro-vignette"></div>
+
+  <!-- Top Cinematic Production HUD -->
+  <div class="intro-hud-top">
+    <div class="hud-rec"><span class="rec-dot"></span>REC &bull; 24.00 FPS</div>
+    <div class="hud-timecode" id="introTimecode">TC 00:00:00:00</div>
+  </div>
+
+  <div class="intro-content" id="introContent">
+    <div class="intro-badge">
+      <span class="badge-line"></span>
+      <span class="badge-text">SILVERGATE PICTURES &bull; STUDIO REEL</span>
+      <span class="badge-line"></span>
+    </div>
+
+    <h1 class="intro-title" id="introTitle">
+      <div class="intro-word-group">
+        <span class="intro-silver">
+          <span class="k-char" style="--i:0">S</span>
+          <span class="k-char" style="--i:1">I</span>
+          <span class="k-char" style="--i:2">L</span>
+          <span class="k-char" style="--i:3">V</span>
+          <span class="k-char" style="--i:4">E</span>
+          <span class="k-char" style="--i:5">R</span>
+        </span>
+        <span class="intro-gate">
+          <span class="k-char" style="--i:6">G</span>
+          <span class="k-char" style="--i:7">A</span>
+          <span class="k-char" style="--i:8">T</span>
+          <span class="k-char" style="--i:9">E</span>
+        </span>
+      </div>
+      <div class="intro-tag-group">
+        <span class="intro-films-tag">FILMS</span>
+        <div class="intro-eq">
+          <span class="eq-bar"></span>
+          <span class="eq-bar"></span>
+          <span class="eq-bar"></span>
+          <span class="eq-bar"></span>
+          <span class="eq-bar"></span>
+        </div>
+      </div>
+    </h1>
+
+    <div class="intro-progress-wrap">
+      <div class="intro-progress-bar">
+        <div class="intro-progress-fill" id="introFill"></div>
+      </div>
+      <div class="intro-progress-pct" id="introPct">0%</div>
+    </div>
+
+    <div class="intro-meta">
+      <span>MASTER 4K HDR</span>
+      <span class="meta-sep">&bull;</span>
+      <span>ANAMORPHIC D-CINEMA</span>
+      <span class="meta-sep">&bull;</span>
+      <span>DALLAS, TX</span>
+    </div>
+  </div>
+
+  <button class="intro-skip" id="introSkipBtn" aria-label="Skip Intro">
+    <span>ENTER STUDIO</span>
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+  </button>
+</div>
+
 <div class="snap-container" id="snapContainer">
 
 <div class="panel" id="panel-1" data-panel="1">
@@ -1732,6 +1982,127 @@
 </div><!-- /.snap-container -->
 
 <script>
+  // ---- High-End Cinematic Intro Splash Controller ----
+  const introScreen = document.getElementById('introScreen');
+  const introFill = document.getElementById('introFill');
+  const introPct = document.getElementById('introPct');
+  const introSkipBtn = document.getElementById('introSkipBtn');
+  const introTimecode = document.getElementById('introTimecode');
+  const introContent = document.getElementById('introContent');
+  const introCanvas = document.getElementById('introCanvas');
+
+  if (introScreen) {
+    // 1. Ambient Gold Ember Particles System
+    if (introCanvas) {
+      const ctx = introCanvas.getContext('2d');
+      let particles = [];
+      function resizeCanvas() {
+        introCanvas.width = window.innerWidth;
+        introCanvas.height = window.innerHeight;
+      }
+      resizeCanvas();
+      window.addEventListener('resize', resizeCanvas);
+
+      for (let i = 0; i < 45; i++) {
+        particles.push({
+          x: Math.random() * introCanvas.width,
+          y: Math.random() * introCanvas.height,
+          r: Math.random() * 2 + 0.6,
+          vx: (Math.random() - 0.5) * 0.4,
+          vy: -Math.random() * 0.7 - 0.2,
+          alpha: Math.random() * 0.7 + 0.2,
+          pulseSpeed: Math.random() * 0.03 + 0.01
+        });
+      }
+
+      let animId;
+      function renderParticles() {
+        ctx.clearRect(0, 0, introCanvas.width, introCanvas.height);
+        particles.forEach(p => {
+          p.x += p.vx;
+          p.y += p.vy;
+          p.alpha += Math.sin(Date.now() * p.pulseSpeed) * 0.005;
+          if (p.y < 0) p.y = introCanvas.height;
+          if (p.x < 0) p.x = introCanvas.width;
+          if (p.x > introCanvas.width) p.x = 0;
+
+          ctx.beginPath();
+          ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+          ctx.fillStyle = `rgba(216, 162, 74, ${Math.max(0.1, Math.min(0.9, p.alpha))})`;
+          ctx.shadowBlur = 10;
+          ctx.shadowColor = 'rgba(216, 162, 74, 0.8)';
+          ctx.fill();
+        });
+        animId = requestAnimationFrame(renderParticles);
+      }
+      renderParticles();
+    }
+
+    // 2. Rolling Timecode & Percentage Counter
+    let tcFrame = 0;
+    const tcInterval = setInterval(() => {
+      tcFrame++;
+      const frames = String(tcFrame % 24).padStart(2, '0');
+      const seconds = String(Math.floor(tcFrame / 24) % 60).padStart(2, '0');
+      if (introTimecode) introTimecode.textContent = `TC 00:00:${seconds}:${frames}`;
+    }, 41);
+
+    // 3. Smooth Progress Fill & Percentage Display
+    let pct = 0;
+    setTimeout(() => {
+      if (introFill) introFill.style.width = '100%';
+    }, 120);
+
+    const pctInterval = setInterval(() => {
+      pct += 2;
+      if (pct > 100) pct = 100;
+      if (introPct) introPct.textContent = `${pct}%`;
+      if (pct === 100) clearInterval(pctInterval);
+    }, 38);
+
+    // 4. Subtle 3D Mouse Parallax
+    window.addEventListener('mousemove', (e) => {
+      if (!introContent || introScreen.classList.contains('hide')) return;
+      const x = (e.clientX / window.innerWidth - 0.5) * 16;
+      const y = (e.clientY / window.innerHeight - 0.5) * 16;
+      introContent.style.transform = `rotateY(${x}deg) rotateX(${-y}deg)`;
+    });
+
+    // 5. Dismiss Transition Function
+    function dismissIntro() {
+      if (!introScreen || introScreen.classList.contains('hide')) return;
+      clearInterval(tcInterval);
+      clearInterval(pctInterval);
+      introScreen.classList.add('hide');
+      setTimeout(() => {
+        introScreen.style.display = 'none';
+        if (typeof animateStats === 'function') animateStats();
+      }, 900);
+    }
+
+    const introTimer = setTimeout(dismissIntro, 2600);
+
+    if (introSkipBtn) {
+      introSkipBtn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        clearTimeout(introTimer);
+        dismissIntro();
+      });
+    }
+
+    introScreen.addEventListener('click', () => {
+      clearTimeout(introTimer);
+      dismissIntro();
+    });
+
+    window.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' || e.key === ' ' || e.key === 'Enter') {
+        clearTimeout(introTimer);
+        dismissIntro();
+      }
+    });
+  }
+
   const menuBtn = document.getElementById('menuBtn');
   const fullnav = document.getElementById('fullnav');
   menuBtn.addEventListener('click', ()=>{
