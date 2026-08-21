@@ -1306,38 +1306,22 @@
   .reveal.in{opacity:1;transform:translateY(0);}
   :focus-visible{outline:2px solid var(--gold);outline-offset:3px;}
 
-  /* ================= SCROLL-SNAP PANELS ================= */
+  /* ================= NORMAL SCROLL LAYOUT ================= */
   html, body{
-    scroll-behavior:auto;
-    -ms-overflow-style:none;
-    scrollbar-width:none;
+    scroll-behavior:smooth;
+    overflow-x:hidden;
   }
-  html::-webkit-scrollbar, body::-webkit-scrollbar{
-    display:none;
-    width:0 !important;
-    height:0 !important;
-  }
+  /* .snap-container is now just a plain wrapper — no viewport-lock, no snapping */
   .snap-container{
-    height:100vh;height:100dvh;overflow-y:scroll;overflow-x:hidden;
-    scroll-snap-type:y mandatory;scroll-behavior:smooth;
-    -ms-overflow-style:none;
-    scrollbar-width:none;
+    overflow:visible;
   }
-  .snap-container::-webkit-scrollbar{
-    display:none;
-    width:0 !important;
-    height:0 !important;
-  }
-  /* Each panel is pinned to exactly one screen. Its real content lives in
-     .panel-inner, which JS scales up or down (via fitPanelsToScreen) so it
-     always fills the screen edge-to-edge — never cut off, never floating
-     in a mostly-empty screen, and never requiring a second scroll to see
-     the rest of that same section. */
+  /* Each panel fills the viewport height on desktop for the full-screen look,
+     but scrolls freely — no snap alignment. */
   .panel{
     height:100vh;height:100dvh;
-    scroll-snap-align:start;scroll-snap-stop:always;
     display:flex;align-items:center;justify-content:center;
     overflow:hidden;position:relative;
+    /* No scroll-snap — panels are purely layout containers now */
   }
   .panel-inner{
     flex-shrink:0;
@@ -1471,7 +1455,7 @@
 
   /* Panel Lens Focus Pull Transition */
   .panel{
-    scroll-snap-align:start;scroll-snap-stop:always;height:100vh;position:relative;overflow:hidden;box-sizing:border-box;
+    height:100vh;position:relative;overflow:hidden;box-sizing:border-box;
     transition:filter .5s cubic-bezier(.16,1,.3,1), opacity .5s var(--ease), transform .5s cubic-bezier(.16,1,.3,1);
     filter:blur(0px);opacity:1;transform:scale(1);
   }
@@ -2693,7 +2677,8 @@
     fullnav.classList.remove('open'); menuBtn.classList.remove('active'); menuBtn.setAttribute('aria-expanded', false);
   }));
 
-  const snapContainer = document.getElementById('snapContainer');
+  // snapContainer is now a plain div — scroll listeners use window / document.documentElement
+  const snapContainer = document.getElementById('snapContainer') || document.documentElement;
 
   // ---- fit every panel's content to exactly one screen, always ----
   // Wrap each panel's real content in .panel-inner, then scale that
@@ -3128,80 +3113,8 @@
     }
   });
 
-  // Intercept scroll wheel events inside Panel 2 with 900ms lock & delta threshold
-  if (p2Panel && snapContainer) {
-    let wheelDeltaAccumulator = 0;
-    let resetDeltaTimer = null;
-
-    snapContainer.addEventListener('wheel', (e) => {
-      const r = p2Panel.getBoundingClientRect();
-      const isP2Active = Math.abs(r.top) < window.innerHeight * 0.4;
-      if (!isP2Active) return;
-
-      if (isP2Transitioning) {
-        if (p2Step > 0 && p2Step < 8) {
-          e.preventDefault();
-        }
-        return;
-      }
-
-      wheelDeltaAccumulator += e.deltaY;
-
-      if (resetDeltaTimer) clearTimeout(resetDeltaTimer);
-      resetDeltaTimer = setTimeout(() => { wheelDeltaAccumulator = 0; }, 200);
-
-      if (Math.abs(wheelDeltaAccumulator) >= 40) {
-        const isScrollDown = wheelDeltaAccumulator > 0;
-        wheelDeltaAccumulator = 0;
-
-        if (isScrollDown) {
-          if (p2Step < 8) {
-            e.preventDefault();
-            isP2Transitioning = true;
-            updateP2State(p2Step + 1);
-            setTimeout(() => { isP2Transitioning = false; }, 900); // 900ms fluid lock window
-          }
-        } else {
-          if (p2Step > 0) {
-            e.preventDefault();
-            isP2Transitioning = true;
-            updateP2State(p2Step - 1);
-            setTimeout(() => { isP2Transitioning = false; }, 900); // 900ms fluid lock window
-          }
-        }
-      } else {
-        if (p2Step > 0 && p2Step < 8) {
-          e.preventDefault();
-        }
-      }
-    }, { passive: false });
-
-    // Touch swipe support — desktop / trackpad only.
-    // On mobile (<= 768px) this handler would hijack native scroll, so we skip it.
-    // Mobile users see all reels stacked and scroll normally.
-    if (window.innerWidth > 768) {
-      let touchStartY = 0;
-      snapContainer.addEventListener('touchstart', (e) => {
-        touchStartY = e.touches[0].clientY;
-      }, { passive: true });
-
-      snapContainer.addEventListener('touchend', (e) => {
-        const r = p2Panel.getBoundingClientRect();
-        const isP2Active = Math.abs(r.top) < window.innerHeight * 0.4;
-        if (!isP2Active) return;
-
-        const touchEndY = e.changedTouches[0].clientY;
-        const diffY = touchStartY - touchEndY;
-        if (Math.abs(diffY) < 40) return;
-
-        if (diffY > 0 && p2Step < 8) { // Swipe UP (scroll down)
-          updateP2State(p2Step + 1);
-        } else if (diffY < 0 && p2Step > 0) { // Swipe DOWN (scroll up)
-          updateP2State(p2Step - 1);
-        }
-      }, { passive: true });
-    }
-  }
+  // Panel 2 reel step scroll — DISABLED: website now uses normal continuous scroll.
+  // Showcase dots still let users navigate reels manually.
 
   // Panel 3 Interactive Step-by-Step Scroll Controller
   let p3Step = 0; // 0 = 2x Giant Title, 1 = Title 5x smaller + Video Card Expanded
@@ -3219,50 +3132,9 @@
     }
   }
 
-  // Intercept scroll wheel events inside Panel 3
-  if (p3Panel && snapContainer) {
-    let p3WheelDelta = 0;
-    let p3ResetTimer = null;
-
-    snapContainer.addEventListener('wheel', (e) => {
-      const r = p3Panel.getBoundingClientRect();
-      const isP3Active = Math.abs(r.top) < window.innerHeight * 0.4;
-      if (!isP3Active) return;
-
-      if (isP3Transitioning) {
-        if (p3Step === 0 && e.deltaY > 0) e.preventDefault();
-        if (p3Step === 1 && e.deltaY < 0) e.preventDefault();
-        return;
-      }
-
-      p3WheelDelta += e.deltaY;
-      if (p3ResetTimer) clearTimeout(p3ResetTimer);
-      p3ResetTimer = setTimeout(() => { p3WheelDelta = 0; }, 200);
-
-      if (Math.abs(p3WheelDelta) >= 40) {
-        const isScrollDown = p3WheelDelta > 0;
-        p3WheelDelta = 0;
-
-        if (isScrollDown) {
-          if (p3Step < 1) {
-            e.preventDefault();
-            isP3Transitioning = true;
-            updateP3State(1);
-            setTimeout(() => { isP3Transitioning = false; }, 900);
-          }
-          // When p3Step === 1, allow native scroll down to Panel 4!
-        } else {
-          if (p3Step > 0) {
-            e.preventDefault();
-            isP3Transitioning = true;
-            updateP3State(0);
-            setTimeout(() => { isP3Transitioning = false; }, 900);
-          }
-          // When p3Step === 0, allow native scroll up to Panel 2!
-        }
-      }
-    }, { passive: false });
-  }
+  // Panel 3 wheel intercept — DISABLED: normal scroll now active.
+  // Activate expanded video state immediately so it's always visible.
+  if (p3Panel) updateP3State(1);
 
   // Panel 4 Interactive Step-by-Step Scroll Controller
   let p4Step = 0;
@@ -3276,45 +3148,9 @@
     else p4Panel.classList.add('p4-active');
   }
 
-  if (p4Panel && snapContainer) {
-    let p4WheelDelta = 0;
-    let p4ResetTimer = null;
-    snapContainer.addEventListener('wheel', (e) => {
-      const r = p4Panel.getBoundingClientRect();
-      const isP4Active = Math.abs(r.top) < window.innerHeight * 0.4;
-      if (!isP4Active) return;
-
-      if (isP4Transitioning) {
-        if (p4Step === 0 && e.deltaY > 0) e.preventDefault();
-        if (p4Step === 1 && e.deltaY < 0) e.preventDefault();
-        return;
-      }
-
-      p4WheelDelta += e.deltaY;
-      if (p4ResetTimer) clearTimeout(p4ResetTimer);
-      p4ResetTimer = setTimeout(() => { p4WheelDelta = 0; }, 200);
-
-      if (Math.abs(p4WheelDelta) >= 40) {
-        const isScrollDown = p4WheelDelta > 0;
-        p4WheelDelta = 0;
-        if (isScrollDown) {
-          if (p4Step < 1) {
-            e.preventDefault();
-            isP4Transitioning = true;
-            updateP4State(1);
-            setTimeout(() => { isP4Transitioning = false; }, 900);
-          }
-        } else {
-          if (p4Step > 0) {
-            e.preventDefault();
-            isP4Transitioning = true;
-            updateP4State(0);
-            setTimeout(() => { isP4Transitioning = false; }, 900);
-          }
-        }
-      }
-    }, { passive: false });
-  }
+  // Panel 4 wheel intercept — DISABLED: normal scroll now active.
+  // Activate expanded video state immediately so it's always visible.
+  if (p4Panel) updateP4State(1);
 
   // Panel 7 Interactive Step-by-Step Scroll Controller
   const btsData = [
@@ -3430,46 +3266,8 @@
     });
   }
 
-  if (p7Panel && snapContainer) {
-    let p7WheelDelta = 0;
-    let p7ResetTimer = null;
-    snapContainer.addEventListener('wheel', (e) => {
-      const r = p7Panel.getBoundingClientRect();
-      const isP7Active = Math.abs(r.top) < window.innerHeight * 0.4;
-      if (!isP7Active) return;
-
-      if (isP7Transitioning) {
-        if (p7Step > 0 && p7Step < 4) e.preventDefault();
-        return;
-      }
-
-      p7WheelDelta += e.deltaY;
-      if (p7ResetTimer) clearTimeout(p7ResetTimer);
-      p7ResetTimer = setTimeout(() => { p7WheelDelta = 0; }, 200);
-
-      if (Math.abs(p7WheelDelta) >= 40) {
-        const isScrollDown = p7WheelDelta > 0;
-        p7WheelDelta = 0;
-        if (isScrollDown) {
-          if (p7Step < 4) {
-            e.preventDefault();
-            isP7Transitioning = true;
-            updateP7State(p7Step + 1);
-            setTimeout(() => { isP7Transitioning = false; }, 900);
-          }
-        } else {
-          if (p7Step > 0) {
-            e.preventDefault();
-            isP7Transitioning = true;
-            updateP7State(p7Step - 1);
-            setTimeout(() => { isP7Transitioning = false; }, 900);
-          }
-        }
-      } else {
-        if (p7Step > 0 && p7Step < 4) e.preventDefault();
-      }
-    }, { passive: false });
-  }
+  // Panel 7 wheel intercept — DISABLED: normal scroll now active.
+  // Showcase dots still let users navigate reels manually.
 
   // ---- in-page anchor links: scroll within the snap container ----
   document.querySelectorAll('a[href^="#"]').forEach(a=>{
@@ -3532,8 +3330,8 @@
   const heroEl = document.querySelector('.hero');
   // Guard: both elements must exist before attaching the scroll listener
   if (stickyCta && heroEl) {
-    snapContainer.addEventListener('scroll', ()=>{
-      const past = snapContainer.scrollTop > heroEl.offsetHeight * 0.8;
+    window.addEventListener('scroll', ()=>{
+      const past = window.scrollY > heroEl.offsetHeight * 0.8;
       stickyCta.classList.toggle('show', past);
     }, {passive:true});
   }
@@ -3567,35 +3365,18 @@
     });
   }
   if(!reduceMotion){
-    snapContainer.addEventListener('scroll', updateParallax, {passive:true});
+    window.addEventListener('scroll', updateParallax, {passive:true});
     updateParallax();
   }
-  // ---- Mobile initialization ----
-  // On desktop, panels 2 & 7 only show their showcase container after the user
-  // scrolls (wheel events drive updateP2State / updateP7State from step 0→1).
-  // On mobile there is no wheel-step — the user just scrolls past — so the
-  // container stays at display:none (step 0) forever, causing the blank section.
-  // Fix: on mobile, immediately advance both panels to step 1 so the first reel
-  // is visible and the CSS flex column layout takes over.
-  if (window.innerWidth <= 768) {
-    // Give the DOM a tick to settle before advancing state
-    requestAnimationFrame(() => {
-      if (typeof updateP2State === 'function') updateP2State(1);
-      if (typeof updateP7State === 'function') updateP7State(1);
-    });
 
-    // Also disable the wheel-based step-scroll on mobile so it never fights
-    // with the native scroll (the listeners check innerWidth at bind time but
-    // orientationchange could flip this — handle that too)
-    window.addEventListener('orientationchange', () => {
-      setTimeout(() => {
-        if (window.innerWidth <= 768) {
-          if (typeof updateP2State === 'function' && typeof p2Step !== 'undefined' && p2Step === 0) updateP2State(1);
-          if (typeof updateP7State === 'function' && typeof p7Step !== 'undefined' && p7Step === 0) updateP7State(1);
-        }
-      }, 300);
-    });
-  }
+  // ---- Initialize all showcase panels on load ----
+  // Now that wheel-step navigation is removed, all devices use normal scroll.
+  // Advance panels 2, 3, 4 and 7 to their "active" states immediately so
+  // content is visible without any user interaction required.
+  requestAnimationFrame(() => {
+    if (typeof updateP2State === 'function') updateP2State(1);
+    if (typeof updateP7State === 'function') updateP7State(1);
+  });
 </script>
 
 </body>
