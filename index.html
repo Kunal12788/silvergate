@@ -629,21 +629,22 @@
     width: 100%;
     max-width: 1150px;
     margin: 0 auto;
-    height: 100vh;
-    padding-top: 100px; /* Increased to make space for the global header */
+    height: auto;
+    min-height: 80vh;
+    padding: 20px 0;
     transition: all 0.85s cubic-bezier(0.16, 1, 0.3, 1);
   }
 
   @media (max-height: 900px) {
     #panel-3 .statement {
-      transform: scale(0.80);
+      transform: scale(0.95);
       transform-origin: center center;
     }
   }
 
   @media (max-height: 750px) {
     #panel-3 .statement {
-      transform: scale(0.70);
+      transform: scale(0.90);
       transform-origin: center center;
     }
   }
@@ -656,18 +657,18 @@
   }
 
   #panel-3 .stmt-text .eyebrow {
-    font-size: clamp(16px, 2.2vw, 28px);
+    font-size: clamp(14px, 1.8vw, 22px);
     letter-spacing: .2em;
     font-weight: 700;
     color: var(--gold);
     justify-content: center;
-    margin-bottom: 12px;
+    margin-bottom: 8px;
     transition: all 0.85s cubic-bezier(0.16, 1, 0.3, 1);
   }
 
   #panel-3 .stmt-text h2 {
-    font-size: clamp(65px, 9.5vw, 130px); /* 2x Giant Title Size */
-    line-height: 0.92;
+    font-size: clamp(32px, 4.5vw, 64px);
+    line-height: 1.05;
     letter-spacing: -.02em;
     color: var(--frame-white);
     transition: all 0.85s cubic-bezier(0.16, 1, 0.3, 1);
@@ -677,7 +678,7 @@
     color: var(--slate);
     font-size: 14px;
     line-height: 1.65;
-    margin-top: 8px; /* Tightened from 16px */
+    margin-top: 8px;
     margin-bottom: 0px;
     max-width: 46ch;
     margin-left: auto;
@@ -685,63 +686,56 @@
     transition: opacity 0.5s var(--ease), transform 0.5s var(--ease);
   }
 
-  /* Sub-state 0: Video Card visible but smaller */
   #panel-3 .stmt-visual {
     display: block !important;
-    flex-shrink: 0; /* Prevents the browser from squishing the height */
+    flex-shrink: 0;
     width: 100%;
-    max-width: 960px;
-    height: 480px; /* Restored 2:1 cinematic aspect ratio */
-    border-radius: 14px;
+    max-width: 1100px;
+    height: 480px;
+    border-radius: 16px;
     overflow: hidden;
-    margin-top: 0px; /* Tightened from 24px */
+    margin-top: 20px;
     position: relative;
     border: 1px solid rgba(237,230,214,.18);
-    box-shadow: 0 15px 35px rgba(0,0,0,.6);
-    opacity: 0.8;
-    transform: scale(0.95) translateY(-10px); /* Shifted slightly up */
+    box-shadow: 0 20px 50px rgba(0,0,0,.8);
+    opacity: 1;
     transition: all 0.85s cubic-bezier(0.16, 1, 0.3, 1);
   }
 
   #panel-3 .stmt-video {
     position: absolute;
-    inset: 0; /* Fixes the massive empty gap at the bottom right! */
+    inset: 0;
     width: 100%;
     height: 100%;
     object-fit: cover;
   }
 
-  /* ================= Sub-state 1: EXPANDED VIDEO SHOWCASE MODE ================= */
-  /* Title Text reduces size by 5x to top */
+  /* Sub-state 1: EXPANDED VIDEO SHOWCASE MODE */
   #panel-3.p3-active .stmt-text {
-    transform: translateY(-5px);
+    transform: translateY(0);
   }
 
   #panel-3.p3-active .stmt-text .eyebrow {
-    font-size: clamp(11px, 1.2vw, 14px);
+    font-size: 13px;
     margin-bottom: 4px;
   }
 
   #panel-3.p3-active .stmt-text h2 {
-    font-size: clamp(24px, 3.2vw, 42px); /* Reduced size by 5x */
+    font-size: clamp(28px, 3.8vw, 48px);
   }
 
   #panel-3.p3-active .stmt-text p.stmt-sub-desc {
-    opacity: 0;
-    transform: translateY(-10px);
-    height: 0;
-    margin: 0;
-    overflow: hidden;
-    transition: all 0.5s var(--ease);
+    opacity: 1;
+    font-size: 14px;
+    display: block;
+    margin-top: 6px;
   }
 
-  /* Video Card becomes LARGER in Sub-state 1 */
   #panel-3.p3-active .stmt-visual {
-    max-width: 1200px; /* Expanded layout */
-    height: 600px; /* Restored 2:1 cinematic aspect ratio */
-    border-radius: 18px;
+    max-width: 1100px;
+    height: 480px;
+    border-radius: 16px;
     opacity: 1;
-    transform: scale(1);
     box-shadow: 0 25px 65px rgba(0,0,0,.85);
   }
 
@@ -753,20 +747,20 @@
 
   /* ================= PANEL 4 (COPY OF PANEL 3) ================= */
   #panel-4 { position: relative !important; }
-  #panel-4 .statement { display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; width: 100%; max-width: 1150px; margin: 0 auto; height: 100vh; padding-top: 100px; transition: all 0.85s cubic-bezier(0.16, 1, 0.3, 1); }
-  @media (max-height: 900px) { #panel-4 .statement { transform: scale(0.80); transform-origin: center center; } }
-  @media (max-height: 750px) { #panel-4 .statement { transform: scale(0.70); transform-origin: center center; } }
+  #panel-4 .statement { display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; width: 100%; max-width: 1150px; margin: 0 auto; height: auto; min-height: 80vh; padding: 20px 0; transition: all 0.85s cubic-bezier(0.16, 1, 0.3, 1); }
+  @media (max-height: 900px) { #panel-4 .statement { transform: scale(0.95); transform-origin: center center; } }
+  @media (max-height: 750px) { #panel-4 .statement { transform: scale(0.90); transform-origin: center center; } }
   #panel-4 .stmt-text { text-align: center; transition: all 0.85s cubic-bezier(0.16, 1, 0.3, 1); will-change: transform, font-size, opacity; }
-  #panel-4 .stmt-text .eyebrow { font-size: clamp(16px, 2.2vw, 28px); letter-spacing: .2em; font-weight: 700; color: var(--gold); justify-content: center; margin-bottom: 12px; transition: all 0.85s cubic-bezier(0.16, 1, 0.3, 1); }
-  #panel-4 .stmt-text h2 { font-size: clamp(65px, 9.5vw, 130px); line-height: 0.92; letter-spacing: -.02em; color: var(--frame-white); transition: all 0.85s cubic-bezier(0.16, 1, 0.3, 1); }
+  #panel-4 .stmt-text .eyebrow { font-size: clamp(14px, 1.8vw, 22px); letter-spacing: .2em; font-weight: 700; color: var(--gold); justify-content: center; margin-bottom: 8px; transition: all 0.85s cubic-bezier(0.16, 1, 0.3, 1); }
+  #panel-4 .stmt-text h2 { font-size: clamp(32px, 4.5vw, 64px); line-height: 1.05; letter-spacing: -.02em; color: var(--frame-white); transition: all 0.85s cubic-bezier(0.16, 1, 0.3, 1); }
   #panel-4 .stmt-text p.stmt-sub-desc { color: var(--slate); font-size: 14px; line-height: 1.65; margin-top: 8px; margin-bottom: 0px; max-width: 46ch; margin-left: auto; margin-right: auto; transition: opacity 0.5s var(--ease), transform 0.5s var(--ease); }
-  #panel-4 .stmt-visual { display: block !important; flex-shrink: 0; width: 100%; max-width: 960px; height: 480px; border-radius: 14px; overflow: hidden; margin-top: 0px; position: relative; border: 1px solid rgba(237,230,214,.18); box-shadow: 0 15px 35px rgba(0,0,0,.6); opacity: 0.8; transform: scale(0.95) translateY(-10px); transition: all 0.85s cubic-bezier(0.16, 1, 0.3, 1); }
+  #panel-4 .stmt-visual { display: block !important; flex-shrink: 0; width: 100%; max-width: 1100px; height: 480px; border-radius: 16px; overflow: hidden; margin-top: 20px; position: relative; border: 1px solid rgba(237,230,214,.18); box-shadow: 0 20px 50px rgba(0,0,0,.8); opacity: 1; transition: all 0.85s cubic-bezier(0.16, 1, 0.3, 1); }
   #panel-4 .stmt-video { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
-  #panel-4.p4-active .stmt-text { transform: translateY(-5px); }
-  #panel-4.p4-active .stmt-text .eyebrow { font-size: clamp(11px, 1.2vw, 14px); margin-bottom: 4px; }
-  #panel-4.p4-active .stmt-text h2 { font-size: clamp(24px, 3.2vw, 42px); }
-  #panel-4.p4-active .stmt-text p.stmt-sub-desc { opacity: 0; transform: translateY(-10px); height: 0; margin: 0; overflow: hidden; transition: all 0.5s var(--ease); }
-  #panel-4.p4-active .stmt-visual { max-width: 1200px; height: 600px; border-radius: 18px; opacity: 1; transform: scale(1); box-shadow: 0 25px 65px rgba(0,0,0,.85); }
+  #panel-4.p4-active .stmt-text { transform: translateY(0); }
+  #panel-4.p4-active .stmt-text .eyebrow { font-size: 13px; margin-bottom: 4px; }
+  #panel-4.p4-active .stmt-text h2 { font-size: clamp(28px, 3.8vw, 48px); }
+  #panel-4.p4-active .stmt-text p.stmt-sub-desc { opacity: 1; font-size: 14px; display: block; margin-top: 6px; }
+  #panel-4.p4-active .stmt-visual { max-width: 1100px; height: 480px; border-radius: 16px; opacity: 1; box-shadow: 0 25px 65px rgba(0,0,0,.85); }
   #panel-4 .stmt-visual:hover { border-color: var(--gold); box-shadow: 0 0 60px rgba(216,162,74,.6), 0 30px 90px rgba(0,0,0,.95); transform: scale(1.02) translateY(-4px); }
 
   /* ================= PANEL 7 (COPY OF PANEL 2) ================= */
@@ -1305,64 +1299,68 @@
   .reveal.in{opacity:1;transform:translateY(0);}
   :focus-visible{outline:2px solid var(--gold);outline-offset:3px;}
 
-  /* ================= NORMAL SCROLL LAYOUT ================= */
+  /* ================= NORMAL SCROLL LAYOUT (TIGHT, CLEAN SPACING) ================= */
   html, body{
     scroll-behavior:smooth;
     overflow-x:hidden;
   }
-  /* .snap-container is now just a plain wrapper — no viewport-lock, no snapping */
   .snap-container{
     overflow:visible;
+    display:block;
   }
-  /* Each panel fills the viewport height on desktop for the full-screen look,
-     but scrolls freely — no snap alignment. */
   .panel{
-    height:100vh;height:100dvh;
+    min-height:85vh;
+    height:auto;
     display:flex;align-items:center;justify-content:center;
-    overflow:hidden;position:relative;
-    /* No scroll-snap — panels are purely layout containers now */
+    position:relative;
+    padding:40px 20px;
+    box-sizing:border-box;
   }
   .panel-inner{
     flex-shrink:0;
     width:100%;
-    padding-top:76px;
     transform-origin:center center;
-    will-change:transform;
   }
   .panel-inner > section:first-child{padding-top:0;}
-  .panel .hero{min-height:360px;}
+  .panel .hero{min-height:340px;}
+  #panel-1 {
+    min-height:92vh;
+    padding-top:76px;
+    padding-bottom:16px;
+  }
   #panel-1 .panel-inner{
     transform:none !important;
     width:100% !important;
-    padding-top:88px;
-    padding-bottom:20px;
+    padding:0;
     display:flex;
     flex-direction:column;
-    height:100vh;
-    justify-content:space-between;
+    height:auto;
+    min-height:auto;
+    gap:16px;
+    justify-content:center;
   }
   .panel1-info-group{
     display:flex;
     flex-direction:column;
-    gap:6px;
+    gap:10px;
     width:100%;
-    transition:transform .65s cubic-bezier(.16,1,.3,1), opacity .65s cubic-bezier(.16,1,.3,1), filter .65s cubic-bezier(.16,1,.3,1);
     transform-origin:bottom center;
-    will-change:transform, opacity;
-    backface-visibility:hidden;
-    transform:translateZ(0);
   }
   .hero:hover + .panel1-info-group,
   #panel-1:has(.hero:hover) .panel1-info-group{
-    transform:scale(0.72) translateY(12px) translateZ(0);
-    opacity:.45;
-    filter:brightness(.6);
+    transform:scale(0.98);
+    opacity:.85;
   }
   #panel-2, #panel-7 {
     position:relative !important;
+    min-height:90vh;
+    padding-top:70px;
+    padding-bottom:20px;
   }
   #panel-10 {
     background: radial-gradient(ellipse 95% 95% at 50% 40%, rgba(140,28,19,.55), rgba(216,162,74,.12) 65%, var(--ink-2) 85%) !important;
+    min-height:auto;
+    padding:40px 20px 20px;
   }
   #panel-10 footer {
     background: transparent !important;
@@ -1370,44 +1368,47 @@
   #panel-2 .panel-inner, #panel-7 .panel-inner {
     transform:none !important;
     width:100% !important;
-    padding-top:104px;
-    padding-bottom:16px;
+    padding:0;
     display:flex;
     flex-direction:column;
-    height:100vh;
+    height:auto;
     justify-content:center;
     align-items:center;
-    overflow:hidden;
   }
-  #panel-8 .panel-inner {
+  #panel-3, #panel-4 {
+    min-height:85vh;
+    padding:40px 20px;
+  }
+  #panel-5 {
+    min-height:50vh;
+    padding:40px 20px;
+  }
+  #panel-8 {
+    min-height:75vh;
+    padding:40px 20px;
+  }
+  #panel-9 {
+    min-height:60vh;
+    padding:40px 20px;
+  }
+  #panel-8 .panel-inner,
+  #panel-9 .panel-inner {
     transform:none !important;
     width:100% !important;
     padding:0 !important;
     display:flex;
     flex-direction:column;
-    height:100vh;
-    justify-content:center;
-    align-items:center;
-    overflow:hidden;
-  }
-  #panel-9 .panel-inner {
-    padding:0 !important;
-    display:flex;
-    flex-direction:column;
+    height:auto;
     justify-content:center;
     align-items:center;
   }
   #panel-10 .panel-inner {
-    padding-top:76px !important;
-    padding-bottom:16px !important;
+    padding:0 !important;
     display:flex;
     flex-direction:column;
     justify-content:space-between;
     align-items:center;
     width:100%;
-  }
-  #panel-2.reels-active .panel-inner, #panel-7.reels-active .panel-inner {
-    justify-content:space-between;
   }
 
   /* ================= GENRE TICKER (ATTACHED DIRECTLY UNDER HEADER IN PANEL 2) ================= */
@@ -1831,14 +1832,9 @@
 }
 </style>
 
-<!-- ===== MOBILE KILL-SWITCH: remove all 100vh / 100dvh height locks ===== -->
+<!-- ===== MOBILE KILL-SWITCH: remove all 100vh / 100dvh height locks & tight spacing ===== -->
 <style>
 @media (max-width: 768px) {
-  /* The main stylesheet uses `height:100vh;height:100dvh` on these exact
-     selectors. Because 100dvh = the full mobile viewport, every panel
-     locks to a full screen height which leaves giant empty black gaps.
-     We override every offending selector at the same or higher specificity. */
-
   html, body {
     height: auto !important;
     min-height: 0 !important;
@@ -1846,7 +1842,6 @@
     overflow-x: hidden !important;
   }
 
-  /* snap container – stop it being a full-viewport scroller */
   .snap-container,
   div.snap-container,
   div#snapContainer {
@@ -1859,10 +1854,10 @@
     display: block !important;
   }
 
-  /* Every panel – kill the 100vh lock at the same selector weight */
+  /* Every panel – clean tight padding on mobile (no huge black gaps) */
   .panel,
   div.panel,
-  #panel-1, #panel-2, #panel-3, #panel-4, #panel-5,
+  #panel-2, #panel-3, #panel-4, #panel-5,
   #panel-7, #panel-8, #panel-9, #panel-10 {
     height: auto !important;
     min-height: 0 !important;
@@ -1871,13 +1866,20 @@
     scroll-snap-stop: normal !important;
     overflow: visible !important;
     display: block !important;
-    padding: 80px 20px 40px !important;
-    /* also kill the lens-focus transition that can leave ghost blur frames */
+    padding: 24px 16px !important;
     filter: none !important;
     transform: none !important;
   }
 
-  /* panel-inner: ID-specificity copies that beat the base #panel-x .panel-inner rules */
+  #panel-1 {
+    height: auto !important;
+    min-height: 0 !important;
+    display: block !important;
+    padding: 68px 16px 20px !important;
+    filter: none !important;
+    transform: none !important;
+  }
+
   .panel-inner,
   #panel-1 .panel-inner,
   #panel-2 .panel-inner,
@@ -1892,7 +1894,7 @@
     min-height: 0 !important;
     max-height: none !important;
     width: 100% !important;
-    transform: none !important;   /* kill JS-injected scale() */
+    transform: none !important;
     padding: 0 !important;
     margin: 0 !important;
     display: block !important;
@@ -1901,19 +1903,16 @@
     align-items: initial !important;
   }
 
-  /* reels-active variant */
   #panel-2.reels-active .panel-inner,
   #panel-7.reels-active .panel-inner {
     height: auto !important;
     justify-content: initial !important;
   }
 
-  /* HUD scene badge – hide on mobile, not needed */
   .hud-scene-badge {
     display: none !important;
   }
 
-  /* Genre ticker – remove absolute positioning that can eat space */
   #panel-2 .genre-ticker-wrap,
   #panel-7 .genre-ticker-wrap {
     position: relative !important;
@@ -1922,10 +1921,6 @@
     margin-bottom: 12px !important;
   }
 
-  /* Showcase container: stacked column, no height lock.
-     IMPORTANT: the base CSS has `#panel-2.reels-active .showcase-container { display:grid !important }`
-     (lines 898 & 778). To beat it we must match or exceed that specificity AND
-     appear later in the document (which this second <style> block does). */
   .showcase-container,
   #panel-2 .showcase-container,
   #panel-7 .showcase-container,
@@ -1936,7 +1931,7 @@
     display: flex !important;
     flex-direction: column !important;
     grid-template-columns: unset !important;
-    gap: 16px !important;
+    gap: 14px !important;
     height: auto !important;
     min-height: 0 !important;
     max-height: none !important;
@@ -1946,9 +1941,8 @@
     padding: 0 !important;
   }
 
-  /* Showcase cards */
   .showcase-video-card {
-    height: 210px !important;
+    height: 200px !important;
     width: 100% !important;
     transform: none !important;
   }
@@ -1956,21 +1950,24 @@
     width: 100% !important;
     height: auto !important;
     transform: none !important;
-    padding: 18px !important;
+    padding: 16px !important;
   }
   .showcase-title { font-size: 24px !important; }
-  .showcase-desc  { font-size: 12px !important; line-height: 1.55 !important; }
+  .showcase-desc  { font-size: 12px !important; line-height: 1.5 !important; margin-bottom: 12px !important; }
+  .showcase-metrics { margin-bottom: 14px !important; gap: 6px !important; }
+  .showcase-metrics span { font-size: 9px !important; padding: 4px 8px !important; }
 
-  /* Statement panels (panel 3 & 4) */
+  /* Statement panels (Services & About) */
   .statement,
   #panel-3 .statement,
   #panel-4 .statement {
     height: auto !important;
+    min-height: 0 !important;
     display: flex !important;
     flex-direction: column !important;
     transform: none !important;
     padding: 0 !important;
-    gap: 20px !important;
+    gap: 14px !important;
   }
   .stmt-text,
   #panel-3 .stmt-text,
@@ -1984,18 +1981,18 @@
   #panel-4 .stmt-text h2,
   #panel-3.p3-active .stmt-text h2,
   #panel-4.p4-active .stmt-text h2 {
-    font-size: 26px !important;
-    line-height: 1.1 !important;
+    font-size: 24px !important;
+    line-height: 1.15 !important;
   }
   .stmt-text p.stmt-sub-desc,
   #panel-3.p3-active .stmt-text p.stmt-sub-desc,
   #panel-4.p4-active .stmt-text p.stmt-sub-desc {
-    font-size: 13px !important;
+    font-size: 12px !important;
     height: auto !important;
     opacity: 1 !important;
     transform: none !important;
     display: block !important;
-    margin-top: 8px !important;
+    margin-top: 6px !important;
   }
   .stmt-visual,
   #panel-3 .stmt-visual,
@@ -2003,61 +2000,66 @@
   #panel-3.p3-active .stmt-visual,
   #panel-4.p4-active .stmt-visual {
     width: 100% !important;
-    height: 200px !important;
+    height: 190px !important;
     transform: none !important;
     opacity: 1 !important;
     margin-top: 0 !important;
   }
 
   /* Reel section */
-  .reel, #panel-8 .reel { height: auto !important; padding: 40px 0 !important; }
-  .reel h2 { font-size: 30px !important; }
-  .reel-play { width: 66px !important; height: 66px !important; }
+  .reel, #panel-8 .reel { height: auto !important; padding: 20px 0 !important; }
+  .reel h2 { font-size: 28px !important; }
+  .reel-play { width: 60px !important; height: 60px !important; }
 
   /* Hero card */
   .hero {
-    height: 280px !important;
-    min-height: 280px !important;
-    max-height: 280px !important;
-    padding: 18px !important;
+    height: 240px !important;
+    min-height: 240px !important;
+    max-height: 240px !important;
+    padding: 16px !important;
     width: 100% !important;
-    margin: 0 auto 16px auto !important;
+    margin: 0 auto 12px auto !important;
   }
-  .hero h1 { font-size: 24px !important; line-height: 1.15 !important; }
-  .hero-sub { font-size: 12px !important; margin-top: 6px !important; }
+  .hero h1 { font-size: 22px !important; line-height: 1.15 !important; }
+  .hero-sub { font-size: 11px !important; margin-top: 6px !important; }
 
-  /* Info group below hero */
+  /* Info group below hero (Two boxes: stats + badges) */
   .panel1-info-group {
     position: relative !important;
     transform: none !important;
     opacity: 1 !important;
     filter: none !important;
     width: 100% !important;
-    margin-top: 16px !important;
+    margin-top: 0 !important;
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 8px !important;
   }
-  .stats     { padding: 14px !important; width: 100% !important; max-width: 100% !important; margin-bottom: 10px !important; }
-  .stats-grid{ grid-template-columns: 1fr 1fr !important; gap: 10px !important; }
-  .stat-num  { font-size: 22px !important; }
+  .stats     { padding: 12px !important; width: 100% !important; max-width: 100% !important; margin-bottom: 0 !important; }
+  .stats-grid{ grid-template-columns: 1fr 1fr !important; gap: 8px !important; }
+  .stat-num  { font-size: 20px !important; }
   .stat-label{ font-size: 8px !important; }
-  .badges    { width: 100% !important; max-width: 100% !important; padding: 8px !important; }
-  .badges-row{ flex-wrap: wrap !important; gap: 8px !important; justify-content: center !important; }
+  .badges    { width: 100% !important; max-width: 100% !important; padding: 8px !important; margin-top: 0 !important; }
+  .badges-row{ flex-wrap: wrap !important; gap: 6px !important; justify-content: center !important; }
 
   /* Footer */
-  .foot-cta h2 { font-size: 30px !important; }
+  .foot-cta h2 { font-size: 26px !important; }
   .foot-grid {
     grid-template-columns: 1fr !important;
-    gap: 18px !important;
+    gap: 14px !important;
     text-align: center !important;
-    margin-top: 20px !important;
+    margin-top: 16px !important;
   }
   .foot-col   { align-items: center !important; }
-  .foot-bottom{ flex-direction: column !important; gap: 10px !important; text-align: center !important; margin-top: 16px !important; }
+  .foot-bottom{ flex-direction: column !important; gap: 8px !important; text-align: center !important; margin-top: 14px !important; }
 
   /* Testimonial */
-  .testimonial blockquote { font-size: 17px !important; line-height: 1.55 !important; }
+  .testimonial { padding: 20px 0 !important; }
+  .testimonial blockquote { font-size: 16px !important; line-height: 1.5 !important; }
 
   /* Clients */
-  .clients-head h2 { font-size: 28px !important; }
+  .clients { padding: 20px 0 !important; }
+  .clients-head h2 { font-size: 26px !important; }
 }
 </style>
 </head>
@@ -3081,20 +3083,14 @@
   }
 
   function updateP2State(newStep) {
-    if (newStep === p2Step) return;
-    p2Step = Math.max(0, Math.min(8, newStep));
-
-    if (p2Step === 0) {
-      p2Panel.classList.remove('reels-active');
-    } else {
-      p2Panel.classList.add('reels-active');
-      renderReelShowcase(p2Step - 1);
-    }
+    p2Step = Math.max(1, Math.min(8, newStep));
+    p2Panel.classList.add('reels-active');
+    renderReelShowcase(p2Step - 1);
   }
 
   // Handle dot clicks directly
   document.addEventListener('click', (e) => {
-    const dot = e.target.closest('.sc-dot');
+    const dot = e.target.closest('#panel-2 .sc-dot');
     if (dot) {
       const reelNum = parseInt(dot.dataset.reel, 10);
       if (reelNum >= 1 && reelNum <= 8) {
@@ -3103,46 +3099,95 @@
     }
   });
 
-  // Panel 2 reel step scroll — DISABLED: website now uses normal continuous scroll.
-  // Showcase dots still let users navigate reels manually.
+  // ---- Panel 2: EIGHT REELS SCROLL ANIMATION CONTROLLER ----
+  let isP2ScrollLocked = false;
 
-  // Panel 3 Interactive Step-by-Step Scroll Controller
-  let p3Step = 0; // 0 = 2x Giant Title, 1 = Title 5x smaller + Video Card Expanded
-  let isP3Transitioning = false;
-  const p3Panel = document.getElementById('panel-3');
-
-  function updateP3State(newStep) {
-    if (newStep === p3Step) return;
-    p3Step = Math.max(0, Math.min(1, newStep));
-
-    if (p3Step === 0) {
-      p3Panel.classList.remove('p3-active');
-    } else {
-      p3Panel.classList.add('p3-active');
+  function stepP2Reel(direction) {
+    if (isP2ScrollLocked) return false;
+    
+    if (direction > 0) { // Scrolling DOWN
+      if (p2Step < 8) {
+        p2Step++;
+        updateP2State(p2Step);
+        isP2ScrollLocked = true;
+        setTimeout(() => { isP2ScrollLocked = false; }, 420);
+        return true; // Stepped reel, prevent native scroll
+      }
+      return false; // At reel 8, allow scrolling to Panel 3 (Our Services)
+    } else { // Scrolling UP
+      if (p2Step > 1) {
+        p2Step--;
+        updateP2State(p2Step);
+        isP2ScrollLocked = true;
+        setTimeout(() => { isP2ScrollLocked = false; }, 420);
+        return true; // Stepped reel, prevent native scroll
+      }
+      return false; // At reel 1, allow scrolling to Panel 1 (Hero)
     }
   }
 
-  // Panel 3 wheel intercept — DISABLED: normal scroll now active.
-  // Activate expanded video state immediately so it's always visible.
+  // Wheel listener for Panel 2 (desktop)
+  window.addEventListener('wheel', (e) => {
+    if (!p2Panel) return;
+    const r = p2Panel.getBoundingClientRect();
+    const isP2Active = r.top <= 120 && r.bottom >= window.innerHeight * 0.55;
+    if (isP2Active) {
+      if (Math.abs(e.deltaY) > 15) {
+        const isDown = e.deltaY > 0;
+        const handled = stepP2Reel(isDown ? 1 : -1);
+        if (handled) {
+          e.preventDefault();
+        }
+      }
+    }
+  }, { passive: false });
+
+  // Touch listener for Panel 2 (mobile)
+  let touchP2StartY = 0;
+  if (p2Panel) {
+    p2Panel.addEventListener('touchstart', (e) => {
+      touchP2StartY = e.touches[0].clientY;
+    }, { passive: true });
+
+    p2Panel.addEventListener('touchmove', (e) => {
+      const r = p2Panel.getBoundingClientRect();
+      const isP2Active = r.top <= 120 && r.bottom >= window.innerHeight * 0.55;
+      if (isP2Active) {
+        const touchCurrentY = e.touches[0].clientY;
+        const diff = touchP2StartY - touchCurrentY;
+        if (Math.abs(diff) > 35) {
+          const isDown = diff > 0;
+          const handled = stepP2Reel(isDown ? 1 : -1);
+          if (handled) {
+            e.preventDefault();
+            touchP2StartY = touchCurrentY;
+          }
+        }
+      }
+    }, { passive: false });
+  }
+
+  // Panel 3 Interactive Step-by-Step Scroll Controller
+  let p3Step = 1;
+  const p3Panel = document.getElementById('panel-3');
+  function updateP3State(newStep) {
+    p3Step = Math.max(0, Math.min(1, newStep));
+    if (p3Step === 0) p3Panel.classList.remove('p3-active');
+    else p3Panel.classList.add('p3-active');
+  }
   if (p3Panel) updateP3State(1);
 
   // Panel 4 Interactive Step-by-Step Scroll Controller
-  let p4Step = 0;
-  let isP4Transitioning = false;
+  let p4Step = 1;
   const p4Panel = document.getElementById('panel-4');
-
   function updateP4State(newStep) {
-    if (newStep === p4Step) return;
     p4Step = Math.max(0, Math.min(1, newStep));
     if (p4Step === 0) p4Panel.classList.remove('p4-active');
     else p4Panel.classList.add('p4-active');
   }
-
-  // Panel 4 wheel intercept — DISABLED: normal scroll now active.
-  // Activate expanded video state immediately so it's always visible.
   if (p4Panel) updateP4State(1);
 
-  // Panel 7 Interactive Step-by-Step Scroll Controller
+  // Panel 7 Interactive Step-by-Step Scroll Controller (4 Reels)
   const btsData = [
     {
       num: '01',
@@ -3178,8 +3223,8 @@
     }
   ];
 
-  let p7Step = 0; // 0 = Billboard, 1..4 = BTS 1..4
-  let isP7Transitioning = false;
+  let p7Step = 1;
+  let isP7ScrollLocked = false;
   const p7Panel = document.getElementById('panel-7');
   let btsActiveVideoSlot = 'A';
 
@@ -3230,24 +3275,18 @@
   }
 
   function updateP7State(newStep) {
-    if (newStep === p7Step) return;
-    p7Step = Math.max(0, Math.min(4, newStep));
-    
-    if (p7Step === 0) {
-      p7Panel.classList.remove('reels-active');
-    } else {
-      p7Panel.classList.add('reels-active');
-      renderBtsShowcase(p7Step - 1);
-    }
+    p7Step = Math.max(1, Math.min(4, newStep));
+    p7Panel.classList.add('reels-active');
+    renderBtsShowcase(p7Step - 1);
   }
 
-  // Handle dot clicks directly for Panel 7 (preventing bubbling to Panel 2's document listener)
+  // Handle dot clicks directly for Panel 7
   const btsDotsContainer = document.getElementById('btsDots');
   if (btsDotsContainer) {
     btsDotsContainer.addEventListener('click', (e) => {
       const dot = e.target.closest('.sc-dot');
       if (dot) {
-        e.stopPropagation(); // Prevents document listener from seeing it
+        e.stopPropagation();
         const reelNum = parseInt(dot.dataset.reel, 10);
         if (reelNum >= 1 && reelNum <= 4) {
           updateP7State(reelNum);
@@ -3256,8 +3295,70 @@
     });
   }
 
-  // Panel 7 wheel intercept — DISABLED: normal scroll now active.
-  // Showcase dots still let users navigate reels manually.
+  function stepP7Reel(direction) {
+    if (isP7ScrollLocked) return false;
+    
+    if (direction > 0) { // Scrolling DOWN
+      if (p7Step < 4) {
+        p7Step++;
+        updateP7State(p7Step);
+        isP7ScrollLocked = true;
+        setTimeout(() => { isP7ScrollLocked = false; }, 420);
+        return true;
+      }
+      return false; // At reel 4, allow scrolling down to Panel 8 (Showreel)
+    } else { // Scrolling UP
+      if (p7Step > 1) {
+        p7Step--;
+        updateP7State(p7Step);
+        isP7ScrollLocked = true;
+        setTimeout(() => { isP7ScrollLocked = false; }, 420);
+        return true;
+      }
+      return false; // At reel 1, allow scrolling up to Panel 5 (Testimonial)
+    }
+  }
+
+  // Wheel listener for Panel 7
+  window.addEventListener('wheel', (e) => {
+    if (!p7Panel) return;
+    const r = p7Panel.getBoundingClientRect();
+    const isP7Active = r.top <= 120 && r.bottom >= window.innerHeight * 0.55;
+    if (isP7Active) {
+      if (Math.abs(e.deltaY) > 15) {
+        const isDown = e.deltaY > 0;
+        const handled = stepP7Reel(isDown ? 1 : -1);
+        if (handled) {
+          e.preventDefault();
+        }
+      }
+    }
+  }, { passive: false });
+
+  // Touch listener for Panel 7
+  let touchP7StartY = 0;
+  if (p7Panel) {
+    p7Panel.addEventListener('touchstart', (e) => {
+      touchP7StartY = e.touches[0].clientY;
+    }, { passive: true });
+
+    p7Panel.addEventListener('touchmove', (e) => {
+      const r = p7Panel.getBoundingClientRect();
+      const isP7Active = r.top <= 120 && r.bottom >= window.innerHeight * 0.55;
+      if (isP7Active) {
+        const touchCurrentY = e.touches[0].clientY;
+        const diff = touchP7StartY - touchCurrentY;
+        if (Math.abs(diff) > 35) {
+          const isDown = diff > 0;
+          const handled = stepP7Reel(isDown ? 1 : -1);
+          if (handled) {
+            e.preventDefault();
+            touchP7StartY = touchCurrentY;
+          }
+        }
+      }
+    }, { passive: false });
+  }
 
   // ---- in-page anchor links: scroll within the snap container ----
   document.querySelectorAll('a[href^="#"]').forEach(a=>{
