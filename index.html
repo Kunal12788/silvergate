@@ -1797,6 +1797,230 @@
     }
   }
 </style>
+
+<!-- ===== MOBILE KILL-SWITCH: remove all 100vh / 100dvh height locks ===== -->
+<style>
+@media (max-width: 768px) {
+  /* The main stylesheet uses `height:100vh;height:100dvh` on these exact
+     selectors. Because 100dvh = the full mobile viewport, every panel
+     locks to a full screen height which leaves giant empty black gaps.
+     We override every offending selector at the same or higher specificity. */
+
+  html, body {
+    height: auto !important;
+    min-height: 0 !important;
+    overflow: visible !important;
+    overflow-x: hidden !important;
+  }
+
+  /* snap container – stop it being a full-viewport scroller */
+  .snap-container,
+  div.snap-container,
+  div#snapContainer {
+    height: auto !important;
+    min-height: 0 !important;
+    max-height: none !important;
+    overflow-y: visible !important;
+    overflow: visible !important;
+    scroll-snap-type: none !important;
+    display: block !important;
+  }
+
+  /* Every panel – kill the 100vh lock at the same selector weight */
+  .panel,
+  div.panel,
+  #panel-1, #panel-2, #panel-3, #panel-4, #panel-5,
+  #panel-7, #panel-8, #panel-9, #panel-10 {
+    height: auto !important;
+    min-height: 0 !important;
+    max-height: none !important;
+    scroll-snap-align: none !important;
+    scroll-snap-stop: normal !important;
+    overflow: visible !important;
+    display: block !important;
+    padding: 80px 20px 40px !important;
+    /* also kill the lens-focus transition that can leave ghost blur frames */
+    filter: none !important;
+    transform: none !important;
+  }
+
+  /* panel-inner: ID-specificity copies that beat the base #panel-x .panel-inner rules */
+  .panel-inner,
+  #panel-1 .panel-inner,
+  #panel-2 .panel-inner,
+  #panel-3 .panel-inner,
+  #panel-4 .panel-inner,
+  #panel-5 .panel-inner,
+  #panel-7 .panel-inner,
+  #panel-8 .panel-inner,
+  #panel-9 .panel-inner,
+  #panel-10 .panel-inner {
+    height: auto !important;
+    min-height: 0 !important;
+    max-height: none !important;
+    width: 100% !important;
+    transform: none !important;   /* kill JS-injected scale() */
+    padding: 0 !important;
+    margin: 0 !important;
+    display: block !important;
+    overflow: visible !important;
+    justify-content: initial !important;
+    align-items: initial !important;
+  }
+
+  /* reels-active variant */
+  #panel-2.reels-active .panel-inner,
+  #panel-7.reels-active .panel-inner {
+    height: auto !important;
+    justify-content: initial !important;
+  }
+
+  /* HUD scene badge – hide on mobile, not needed */
+  .hud-scene-badge {
+    display: none !important;
+  }
+
+  /* Genre ticker – remove absolute positioning that can eat space */
+  #panel-2 .genre-ticker-wrap,
+  #panel-7 .genre-ticker-wrap {
+    position: relative !important;
+    top: auto !important;
+    z-index: 1 !important;
+    margin-bottom: 12px !important;
+  }
+
+  /* Showcase container: stacked column, no height lock */
+  .showcase-container,
+  #panel-2 .showcase-container,
+  #panel-7 .showcase-container,
+  #panel-2.reels-active .showcase-container,
+  #panel-7.reels-active .showcase-container {
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 16px !important;
+    height: auto !important;
+    min-height: 0 !important;
+    max-height: none !important;
+    transform: none !important;
+    opacity: 1 !important;
+    overflow: visible !important;
+    padding: 0 !important;
+  }
+
+  /* Showcase cards */
+  .showcase-video-card {
+    height: 210px !important;
+    width: 100% !important;
+    transform: none !important;
+  }
+  .showcase-info-box {
+    width: 100% !important;
+    height: auto !important;
+    transform: none !important;
+    padding: 18px !important;
+  }
+  .showcase-title { font-size: 24px !important; }
+  .showcase-desc  { font-size: 12px !important; line-height: 1.55 !important; }
+
+  /* Statement panels (panel 3 & 4) */
+  .statement,
+  #panel-3 .statement,
+  #panel-4 .statement {
+    height: auto !important;
+    display: flex !important;
+    flex-direction: column !important;
+    transform: none !important;
+    padding: 0 !important;
+    gap: 20px !important;
+  }
+  .stmt-text,
+  #panel-3 .stmt-text,
+  #panel-4 .stmt-text {
+    width: 100% !important;
+    transform: none !important;
+    opacity: 1 !important;
+  }
+  .stmt-text h2,
+  #panel-3 .stmt-text h2,
+  #panel-4 .stmt-text h2,
+  #panel-3.p3-active .stmt-text h2,
+  #panel-4.p4-active .stmt-text h2 {
+    font-size: 26px !important;
+    line-height: 1.1 !important;
+  }
+  .stmt-text p.stmt-sub-desc,
+  #panel-3.p3-active .stmt-text p.stmt-sub-desc,
+  #panel-4.p4-active .stmt-text p.stmt-sub-desc {
+    font-size: 13px !important;
+    height: auto !important;
+    opacity: 1 !important;
+    transform: none !important;
+    display: block !important;
+    margin-top: 8px !important;
+  }
+  .stmt-visual,
+  #panel-3 .stmt-visual,
+  #panel-4 .stmt-visual,
+  #panel-3.p3-active .stmt-visual,
+  #panel-4.p4-active .stmt-visual {
+    width: 100% !important;
+    height: 200px !important;
+    transform: none !important;
+    opacity: 1 !important;
+    margin-top: 0 !important;
+  }
+
+  /* Reel section */
+  .reel, #panel-8 .reel { height: auto !important; padding: 40px 0 !important; }
+  .reel h2 { font-size: 30px !important; }
+  .reel-play { width: 66px !important; height: 66px !important; }
+
+  /* Hero card */
+  .hero {
+    height: 280px !important;
+    min-height: 280px !important;
+    max-height: 280px !important;
+    padding: 18px !important;
+    width: 100% !important;
+    margin: 0 auto 16px auto !important;
+  }
+  .hero h1 { font-size: 24px !important; line-height: 1.15 !important; }
+  .hero-sub { font-size: 12px !important; margin-top: 6px !important; }
+
+  /* Info group below hero */
+  .panel1-info-group {
+    position: relative !important;
+    transform: none !important;
+    opacity: 1 !important;
+    filter: none !important;
+    width: 100% !important;
+    margin-top: 16px !important;
+  }
+  .stats     { padding: 14px !important; width: 100% !important; max-width: 100% !important; margin-bottom: 10px !important; }
+  .stats-grid{ grid-template-columns: 1fr 1fr !important; gap: 10px !important; }
+  .stat-num  { font-size: 22px !important; }
+  .stat-label{ font-size: 8px !important; }
+  .badges    { width: 100% !important; max-width: 100% !important; padding: 8px !important; }
+  .badges-row{ flex-wrap: wrap !important; gap: 8px !important; justify-content: center !important; }
+
+  /* Footer */
+  .foot-cta h2 { font-size: 30px !important; }
+  .foot-grid {
+    grid-template-columns: 1fr !important;
+    gap: 18px !important;
+    text-align: center !important;
+    margin-top: 20px !important;
+  }
+  .foot-col   { align-items: center !important; }
+  .foot-bottom{ flex-direction: column !important; gap: 10px !important; text-align: center !important; margin-top: 16px !important; }
+
+  /* Testimonial */
+  .testimonial blockquote { font-size: 17px !important; line-height: 1.55 !important; }
+
+  /* Clients */
+  .clients-head h2 { font-size: 28px !important; }
+}
+</style>
 </head>
 <body>
 
