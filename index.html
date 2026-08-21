@@ -452,9 +452,8 @@
   }
 
   #panel-2:has(.showcase-video-card:hover) .work-head{
-    opacity:0.08;
-    filter:blur(4px);
-    transition:opacity 0.5s var(--ease), filter 0.5s var(--ease);
+    opacity:0.6;
+    transition:opacity 0.5s var(--ease);
   }
 
   /* Panel 1 Viewfinder Corner Expansion on Hover */
@@ -777,7 +776,7 @@
   #panel-7.reels-active .work-head p.work-sub { display: none; }
   #panel-7.reels-active .showcase-container { display: grid !important; opacity: 1; transform: translateY(0) scale(1); }
   #panel-7.reels-active .showcase-dots { display: flex !important; opacity: 1; }
-  #panel-7:has(.showcase-video-card:hover) .work-head { opacity: 0.08; filter: blur(4px); transition: opacity 0.5s var(--ease), filter 0.5s var(--ease); }
+  #panel-7:has(.showcase-video-card:hover) .work-head { opacity: 0.6; transition: opacity 0.5s var(--ease); }
 
   .showcase-genre{
     font-family:'IBM Plex Mono',monospace;
@@ -1453,14 +1452,9 @@
     box-shadow:0 0 25px rgba(216,162,74,.5);
   }
 
-  /* Panel Lens Focus Pull Transition */
+  /* Panel styling */
   .panel{
     height:100vh;position:relative;overflow:hidden;box-sizing:border-box;
-    transition:filter .5s cubic-bezier(.16,1,.3,1), opacity .5s var(--ease), transform .5s cubic-bezier(.16,1,.3,1);
-    filter:blur(0px);opacity:1;transform:scale(1);
-  }
-  .panel.focus-out{
-    filter:blur(10px);opacity:.65;transform:scale(.97);
   }
 
   /* ================= DOT NAV ================= */
@@ -2783,11 +2777,7 @@
         const n = e.target.dataset.panel;
         dotButtons.forEach(b=> b.classList.toggle('active', b.dataset.panel === n));
 
-        // Lens Focus Pull Transition
-        panels.forEach(p => {
-          if (p === e.target) p.classList.remove('focus-out');
-          else p.classList.add('focus-out');
-        });
+
 
         // HUD Scene Badge Update
         if (hudNum && hudTitle) {
