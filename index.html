@@ -452,8 +452,9 @@
   }
 
   #panel-2:has(.showcase-video-card:hover) .work-head{
-    opacity:0.6;
-    transition:opacity 0.5s var(--ease);
+    opacity:0.08;
+    filter:blur(4px);
+    transition:opacity 0.5s var(--ease), filter 0.5s var(--ease);
   }
 
   /* Panel 1 Viewfinder Corner Expansion on Hover */
@@ -629,22 +630,28 @@
     width: 100%;
     max-width: 1150px;
     margin: 0 auto;
-    height: auto;
-    min-height: 80vh;
-    padding: 20px 0;
+    height: 100vh;
+    padding-top: 100px; /* Increased to make space for the global header */
     transition: all 0.85s cubic-bezier(0.16, 1, 0.3, 1);
   }
 
-  @media (max-height: 900px) {
+  /* These two rules exist to shrink the panel-3 content on short, wide
+     desktop/laptop windows (height-based only). Scoped to min-width:769px
+     so they never fire on phones — a phone in portrait is "short" by this
+     query's definition too, and since CSS transform:scale() doesn't give
+     back the space the un-scaled box originally took up, that was leaving
+     a large dead gap around the visibly-shrunk content on mobile. Mobile
+     already gets its own explicit sizing further down in the stylesheet. */
+  @media (max-height: 900px) and (min-width: 769px) {
     #panel-3 .statement {
-      transform: scale(0.95);
+      transform: scale(0.80);
       transform-origin: center center;
     }
   }
 
-  @media (max-height: 750px) {
+  @media (max-height: 750px) and (min-width: 769px) {
     #panel-3 .statement {
-      transform: scale(0.90);
+      transform: scale(0.70);
       transform-origin: center center;
     }
   }
@@ -657,18 +664,18 @@
   }
 
   #panel-3 .stmt-text .eyebrow {
-    font-size: clamp(14px, 1.8vw, 22px);
+    font-size: clamp(16px, 2.2vw, 28px);
     letter-spacing: .2em;
     font-weight: 700;
     color: var(--gold);
     justify-content: center;
-    margin-bottom: 8px;
+    margin-bottom: 12px;
     transition: all 0.85s cubic-bezier(0.16, 1, 0.3, 1);
   }
 
   #panel-3 .stmt-text h2 {
-    font-size: clamp(32px, 4.5vw, 64px);
-    line-height: 1.05;
+    font-size: clamp(65px, 9.5vw, 130px); /* 2x Giant Title Size */
+    line-height: 0.92;
     letter-spacing: -.02em;
     color: var(--frame-white);
     transition: all 0.85s cubic-bezier(0.16, 1, 0.3, 1);
@@ -678,7 +685,7 @@
     color: var(--slate);
     font-size: 14px;
     line-height: 1.65;
-    margin-top: 8px;
+    margin-top: 8px; /* Tightened from 16px */
     margin-bottom: 0px;
     max-width: 46ch;
     margin-left: auto;
@@ -686,56 +693,63 @@
     transition: opacity 0.5s var(--ease), transform 0.5s var(--ease);
   }
 
+  /* Sub-state 0: Video Card visible but smaller */
   #panel-3 .stmt-visual {
     display: block !important;
-    flex-shrink: 0;
+    flex-shrink: 0; /* Prevents the browser from squishing the height */
     width: 100%;
-    max-width: 1100px;
-    height: 480px;
-    border-radius: 16px;
+    max-width: 960px;
+    height: 480px; /* Restored 2:1 cinematic aspect ratio */
+    border-radius: 14px;
     overflow: hidden;
-    margin-top: 20px;
+    margin-top: 0px; /* Tightened from 24px */
     position: relative;
     border: 1px solid rgba(237,230,214,.18);
-    box-shadow: 0 20px 50px rgba(0,0,0,.8);
-    opacity: 1;
+    box-shadow: 0 15px 35px rgba(0,0,0,.6);
+    opacity: 0.8;
+    transform: scale(0.95) translateY(-10px); /* Shifted slightly up */
     transition: all 0.85s cubic-bezier(0.16, 1, 0.3, 1);
   }
 
   #panel-3 .stmt-video {
     position: absolute;
-    inset: 0;
+    inset: 0; /* Fixes the massive empty gap at the bottom right! */
     width: 100%;
     height: 100%;
     object-fit: cover;
   }
 
-  /* Sub-state 1: EXPANDED VIDEO SHOWCASE MODE */
+  /* ================= Sub-state 1: EXPANDED VIDEO SHOWCASE MODE ================= */
+  /* Title Text reduces size by 5x to top */
   #panel-3.p3-active .stmt-text {
-    transform: translateY(0);
+    transform: translateY(-5px);
   }
 
   #panel-3.p3-active .stmt-text .eyebrow {
-    font-size: 13px;
+    font-size: clamp(11px, 1.2vw, 14px);
     margin-bottom: 4px;
   }
 
   #panel-3.p3-active .stmt-text h2 {
-    font-size: clamp(28px, 3.8vw, 48px);
+    font-size: clamp(24px, 3.2vw, 42px); /* Reduced size by 5x */
   }
 
   #panel-3.p3-active .stmt-text p.stmt-sub-desc {
-    opacity: 1;
-    font-size: 14px;
-    display: block;
-    margin-top: 6px;
+    opacity: 0;
+    transform: translateY(-10px);
+    height: 0;
+    margin: 0;
+    overflow: hidden;
+    transition: all 0.5s var(--ease);
   }
 
+  /* Video Card becomes LARGER in Sub-state 1 */
   #panel-3.p3-active .stmt-visual {
-    max-width: 1100px;
-    height: 480px;
-    border-radius: 16px;
+    max-width: 1200px; /* Expanded layout */
+    height: 600px; /* Restored 2:1 cinematic aspect ratio */
+    border-radius: 18px;
     opacity: 1;
+    transform: scale(1);
     box-shadow: 0 25px 65px rgba(0,0,0,.85);
   }
 
@@ -747,20 +761,20 @@
 
   /* ================= PANEL 4 (COPY OF PANEL 3) ================= */
   #panel-4 { position: relative !important; }
-  #panel-4 .statement { display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; width: 100%; max-width: 1150px; margin: 0 auto; height: auto; min-height: 80vh; padding: 20px 0; transition: all 0.85s cubic-bezier(0.16, 1, 0.3, 1); }
-  @media (max-height: 900px) { #panel-4 .statement { transform: scale(0.95); transform-origin: center center; } }
-  @media (max-height: 750px) { #panel-4 .statement { transform: scale(0.90); transform-origin: center center; } }
+  #panel-4 .statement { display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; width: 100%; max-width: 1150px; margin: 0 auto; height: 100vh; padding-top: 100px; transition: all 0.85s cubic-bezier(0.16, 1, 0.3, 1); }
+  @media (max-height: 900px) and (min-width: 769px) { #panel-4 .statement { transform: scale(0.80); transform-origin: center center; } }
+  @media (max-height: 750px) and (min-width: 769px) { #panel-4 .statement { transform: scale(0.70); transform-origin: center center; } }
   #panel-4 .stmt-text { text-align: center; transition: all 0.85s cubic-bezier(0.16, 1, 0.3, 1); will-change: transform, font-size, opacity; }
-  #panel-4 .stmt-text .eyebrow { font-size: clamp(14px, 1.8vw, 22px); letter-spacing: .2em; font-weight: 700; color: var(--gold); justify-content: center; margin-bottom: 8px; transition: all 0.85s cubic-bezier(0.16, 1, 0.3, 1); }
-  #panel-4 .stmt-text h2 { font-size: clamp(32px, 4.5vw, 64px); line-height: 1.05; letter-spacing: -.02em; color: var(--frame-white); transition: all 0.85s cubic-bezier(0.16, 1, 0.3, 1); }
+  #panel-4 .stmt-text .eyebrow { font-size: clamp(16px, 2.2vw, 28px); letter-spacing: .2em; font-weight: 700; color: var(--gold); justify-content: center; margin-bottom: 12px; transition: all 0.85s cubic-bezier(0.16, 1, 0.3, 1); }
+  #panel-4 .stmt-text h2 { font-size: clamp(65px, 9.5vw, 130px); line-height: 0.92; letter-spacing: -.02em; color: var(--frame-white); transition: all 0.85s cubic-bezier(0.16, 1, 0.3, 1); }
   #panel-4 .stmt-text p.stmt-sub-desc { color: var(--slate); font-size: 14px; line-height: 1.65; margin-top: 8px; margin-bottom: 0px; max-width: 46ch; margin-left: auto; margin-right: auto; transition: opacity 0.5s var(--ease), transform 0.5s var(--ease); }
-  #panel-4 .stmt-visual { display: block !important; flex-shrink: 0; width: 100%; max-width: 1100px; height: 480px; border-radius: 16px; overflow: hidden; margin-top: 20px; position: relative; border: 1px solid rgba(237,230,214,.18); box-shadow: 0 20px 50px rgba(0,0,0,.8); opacity: 1; transition: all 0.85s cubic-bezier(0.16, 1, 0.3, 1); }
+  #panel-4 .stmt-visual { display: block !important; flex-shrink: 0; width: 100%; max-width: 960px; height: 480px; border-radius: 14px; overflow: hidden; margin-top: 0px; position: relative; border: 1px solid rgba(237,230,214,.18); box-shadow: 0 15px 35px rgba(0,0,0,.6); opacity: 0.8; transform: scale(0.95) translateY(-10px); transition: all 0.85s cubic-bezier(0.16, 1, 0.3, 1); }
   #panel-4 .stmt-video { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
-  #panel-4.p4-active .stmt-text { transform: translateY(0); }
-  #panel-4.p4-active .stmt-text .eyebrow { font-size: 13px; margin-bottom: 4px; }
-  #panel-4.p4-active .stmt-text h2 { font-size: clamp(28px, 3.8vw, 48px); }
-  #panel-4.p4-active .stmt-text p.stmt-sub-desc { opacity: 1; font-size: 14px; display: block; margin-top: 6px; }
-  #panel-4.p4-active .stmt-visual { max-width: 1100px; height: 480px; border-radius: 16px; opacity: 1; box-shadow: 0 25px 65px rgba(0,0,0,.85); }
+  #panel-4.p4-active .stmt-text { transform: translateY(-5px); }
+  #panel-4.p4-active .stmt-text .eyebrow { font-size: clamp(11px, 1.2vw, 14px); margin-bottom: 4px; }
+  #panel-4.p4-active .stmt-text h2 { font-size: clamp(24px, 3.2vw, 42px); }
+  #panel-4.p4-active .stmt-text p.stmt-sub-desc { opacity: 0; transform: translateY(-10px); height: 0; margin: 0; overflow: hidden; transition: all 0.5s var(--ease); }
+  #panel-4.p4-active .stmt-visual { max-width: 1200px; height: 600px; border-radius: 18px; opacity: 1; transform: scale(1); box-shadow: 0 25px 65px rgba(0,0,0,.85); }
   #panel-4 .stmt-visual:hover { border-color: var(--gold); box-shadow: 0 0 60px rgba(216,162,74,.6), 0 30px 90px rgba(0,0,0,.95); transform: scale(1.02) translateY(-4px); }
 
   /* ================= PANEL 7 (COPY OF PANEL 2) ================= */
@@ -770,7 +784,7 @@
   #panel-7.reels-active .work-head p.work-sub { display: none; }
   #panel-7.reels-active .showcase-container { display: grid !important; opacity: 1; transform: translateY(0) scale(1); }
   #panel-7.reels-active .showcase-dots { display: flex !important; opacity: 1; }
-  #panel-7:has(.showcase-video-card:hover) .work-head { opacity: 0.6; transition: opacity 0.5s var(--ease); }
+  #panel-7:has(.showcase-video-card:hover) .work-head { opacity: 0.08; filter: blur(4px); transition: opacity 0.5s var(--ease), filter 0.5s var(--ease); }
 
   .showcase-genre{
     font-family:'IBM Plex Mono',monospace;
@@ -1099,7 +1113,7 @@
   .stat-lbl{font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.1em;color:var(--slate);text-transform:uppercase;}
 
   /* Filter Pills */
-  .client-filter-pills{display:flex;justify-content:center;gap:10px;margin-top:18px;margin-bottom:22px;}
+  .client-filter-pills{display:flex;flex-wrap:wrap;justify-content:center;gap:10px;margin-top:18px;margin-bottom:22px;}
   .filter-pill{
     font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.12em;text-transform:uppercase;
     padding:6px 16px;border-radius:999px;color:var(--slate);background:rgba(237,230,214,.04);
@@ -1299,68 +1313,89 @@
   .reveal.in{opacity:1;transform:translateY(0);}
   :focus-visible{outline:2px solid var(--gold);outline-offset:3px;}
 
-  /* ================= NORMAL SCROLL LAYOUT (TIGHT, CLEAN SPACING) ================= */
+  /* ================= SCROLL-SNAP PANELS ================= */
   html, body{
-    scroll-behavior:smooth;
-    overflow-x:hidden;
+    scroll-behavior:auto;
+    -ms-overflow-style:none;
+    scrollbar-width:none;
+  }
+  html::-webkit-scrollbar, body::-webkit-scrollbar{
+    display:none;
+    width:0 !important;
+    height:0 !important;
   }
   .snap-container{
-    overflow:visible;
-    display:block;
+    height:100vh;height:100dvh;overflow-y:scroll;overflow-x:hidden;
+    scroll-snap-type:y mandatory;
+    /* NOT scroll-behavior:smooth. Mandatory snap always lands exactly on
+       a panel — the only question is how long the ride there takes.
+       "smooth" stretches that ride into a slow eased animation, and for
+       most of it neither panel's (vertically-centered) content is in
+       frame yet, which is what read as a black gap between panels.
+       "auto" lets a snap resolve immediately, so scrolling reads as a
+       direct panel-to-panel shift instead of a scroll through empty
+       space. */
+    scroll-behavior:auto;
+    -ms-overflow-style:none;
+    scrollbar-width:none;
   }
+  .snap-container::-webkit-scrollbar{
+    display:none;
+    width:0 !important;
+    height:0 !important;
+  }
+  /* Each panel is pinned to exactly one screen. Its real content lives in
+     .panel-inner, which JS scales up or down (via fitPanelsToScreen) so it
+     always fills the screen edge-to-edge — never cut off, never floating
+     in a mostly-empty screen, and never requiring a second scroll to see
+     the rest of that same section. */
   .panel{
-    min-height:auto;
-    height:auto;
-    display:block;
-    position:relative;
-    padding:30px 20px;
-    box-sizing:border-box;
+    height:100vh;height:100dvh;
+    scroll-snap-align:start;scroll-snap-stop:always;
+    display:flex;align-items:center;justify-content:center;
+    overflow:hidden;position:relative;
   }
   .panel-inner{
     flex-shrink:0;
     width:100%;
+    padding-top:76px;
     transform-origin:center center;
+    will-change:transform;
   }
   .panel-inner > section:first-child{padding-top:0;}
-  .panel .hero{min-height:300px;}
-  #panel-1 {
-    min-height:auto;
-    padding-top:80px;
-    padding-bottom:16px;
-  }
+  .panel .hero{min-height:360px;}
   #panel-1 .panel-inner{
     transform:none !important;
     width:100% !important;
-    padding:0;
+    padding-top:88px;
+    padding-bottom:20px;
     display:flex;
     flex-direction:column;
-    height:auto;
-    min-height:auto;
-    gap:12px;
-    justify-content:center;
+    height:100vh;
+    justify-content:space-between;
   }
   .panel1-info-group{
     display:flex;
     flex-direction:column;
-    gap:10px;
+    gap:6px;
     width:100%;
+    transition:transform .65s cubic-bezier(.16,1,.3,1), opacity .65s cubic-bezier(.16,1,.3,1), filter .65s cubic-bezier(.16,1,.3,1);
     transform-origin:bottom center;
+    will-change:transform, opacity;
+    backface-visibility:hidden;
+    transform:translateZ(0);
   }
   .hero:hover + .panel1-info-group,
   #panel-1:has(.hero:hover) .panel1-info-group{
-    transform:scale(0.98);
-    opacity:.85;
+    transform:scale(0.72) translateY(12px) translateZ(0);
+    opacity:.45;
+    filter:brightness(.6);
   }
   #panel-2, #panel-7 {
     position:relative !important;
-    min-height:auto;
-    padding-top:50px;
-    padding-bottom:20px;
   }
   #panel-10 {
     background: radial-gradient(ellipse 95% 95% at 50% 40%, rgba(140,28,19,.55), rgba(216,162,74,.12) 65%, var(--ink-2) 85%) !important;
-    min-height:auto;
-    padding:30px 20px 20px;
   }
   #panel-10 footer {
     background: transparent !important;
@@ -1368,54 +1403,51 @@
   #panel-2 .panel-inner, #panel-7 .panel-inner {
     transform:none !important;
     width:100% !important;
-    padding:0;
+    padding-top:104px;
+    padding-bottom:16px;
     display:flex;
     flex-direction:column;
-    height:auto;
+    height:100vh;
     justify-content:center;
-    align-items:center;
+    align-items:stretch;
+    overflow:hidden;
   }
-  #panel-3, #panel-4 {
-    min-height:auto;
-    padding:30px 20px;
-  }
-  #panel-5 {
-    min-height:auto;
-    padding:30px 20px;
-  }
-  #panel-8 {
-    min-height:auto;
-    padding:30px 20px;
-  }
-  #panel-9 {
-    min-height:auto;
-    padding:30px 20px;
-  }
-  #panel-8 .panel-inner,
-  #panel-9 .panel-inner {
+  #panel-8 .panel-inner {
     transform:none !important;
     width:100% !important;
     padding:0 !important;
     display:flex;
     flex-direction:column;
-    height:auto;
+    height:100vh;
     justify-content:center;
-    align-items:center;
+    align-items:stretch;
+    overflow:hidden;
   }
-  #panel-10 .panel-inner {
+  #panel-9 .panel-inner {
     padding:0 !important;
     display:flex;
     flex-direction:column;
+    justify-content:center;
+    align-items:stretch;
+  }
+  #panel-10 .panel-inner {
+    padding-top:76px !important;
+    padding-bottom:16px !important;
+    display:flex;
+    flex-direction:column;
     justify-content:space-between;
-    align-items:center;
+    align-items:stretch;
     width:100%;
+  }
+  #panel-2.reels-active .panel-inner, #panel-7.reels-active .panel-inner {
+    justify-content:space-between;
   }
 
   /* ================= GENRE TICKER (ATTACHED DIRECTLY UNDER HEADER IN PANEL 2) ================= */
   #panel-2 .genre-ticker-wrap, #panel-7 .genre-ticker-wrap {
-    position:relative;
-    top:0;
-    margin-bottom:16px;
+    position:absolute;
+    top:64px; /* Attached directly under top navbar header (height 64px) */
+    left:0;
     width:100%;
     overflow:hidden;
     background:rgba(23,19,15,.95);
@@ -1453,9 +1485,29 @@
     box-shadow:0 0 25px rgba(216,162,74,.5);
   }
 
-  /* Panel styling */
+  /* Panel Lens Focus Pull Transition */
   .panel{
-    position:relative;overflow:hidden;box-sizing:border-box;
+    scroll-snap-align:start;scroll-snap-stop:always;height:100vh;position:relative;overflow:hidden;box-sizing:border-box;
+    transition:filter .5s cubic-bezier(.16,1,.3,1), opacity .5s var(--ease), transform .5s cubic-bezier(.16,1,.3,1);
+    filter:blur(0px);opacity:1;transform:scale(1);
+  }
+  .panel.focus-out{
+    filter:blur(10px);opacity:.65;transform:scale(.97);
+  }
+  /* While the snap-container is actively moving between panels, never let
+     the "lens focus pull" effect above touch the two panels involved in
+     the transition. That effect blurs+shrinks+dims any panel that isn't
+     the fully-settled active one — fine once scroll has come to rest
+     (the dimmed panels are off-screen anyway), but during the transition
+     itself BOTH the outgoing and incoming panel are partially on screen
+     at once, and blurring/shrinking/dimming them both is exactly what
+     produced a dark, empty-looking void between the two panels mid-scroll.
+     Freezing focus-out to "off" for the ~duration of the scroll and only
+     letting it re-apply once things settle keeps every frame of the
+     transition crisp and full-bleed, so scrolling reads as a direct panel
+     -to-panel shift instead of scrolling through a gap. */
+  .snap-container.is-scrolling .panel.focus-out{
+    filter:none;opacity:1;transform:scale(1);
   }
 
   /* ================= DOT NAV ================= */
@@ -1475,298 +1527,247 @@
   }
   .dot-nav button:hover::before{opacity:1;}
   .dot-nav button.active{background:var(--gold);width:9px;height:9px;box-shadow:0 0 0 4px rgba(216,162,74,.2);}
-  @media (max-width:820px){ .dot-nav{display:none;} }
 
   @media (prefers-reduced-motion: reduce){
     *{animation-duration:.001ms !important;animation-iteration-count:1 !important;transition-duration:.001ms !important;scroll-behavior:auto !important;}
     .snap-container{scroll-snap-type:none;overflow-y:auto;}
   }
-</style>
 
-<!-- ===== TOUCH / HOVER FIX: clear all stuck :hover effects on touch screens ===== -->
-<style>
-/* On real touch-only devices (phones/tablets), browsers can leave hover states
-   permanently "stuck" after a tap. This block removes every hover dimming / blur
-   effect on those devices. */
-@media (hover: none) {
-  /* Work showcase hover effects */
-  .showcase-video-card:hover {
-    transform: none !important;
-    border-color: rgba(237,230,214,.18) !important;
-    box-shadow: 0 20px 50px rgba(0,0,0,.8) !important;
-    z-index: 5 !important;
+  /* ================= MOBILE RESPONSIVENESS OVERRIDES ================= */
+  @media (max-width: 768px) {
+    /* Mandatory snap + one full-screen panel at a time, matching desktop's
+       scroll-jack mechanics exactly. Content is fit to the screen the same
+       way as desktop (see fitPanelsToScreen JS, which now runs at every
+       width) so nothing gets clipped by the fixed-height panel. */
+    .snap-container {
+      height: 100vh !important;
+      height: 100dvh !important;
+      overflow-y: scroll !important;
+      scroll-snap-type: y mandatory !important;
+      scrollbar-width: none !important;
+    }
+    .snap-container::-webkit-scrollbar {
+      display: none !important;
+      width: 0 !important;
+    }
+    .panel {
+      height: 100vh !important;
+      height: 100dvh !important;
+      scroll-snap-align: start !important;
+      scroll-snap-stop: always !important;
+      overflow: hidden !important;
+      display: flex !important;
+      flex-direction: column !important;
+      justify-content: center !important;
+      padding: 24px 20px !important;
+      box-sizing: border-box !important;
+    }
+    /* Panel 1 is the one panel the JS fit-to-screen scaler skips (both here
+       and on desktop) since it uses flex space-between instead — give it a
+       min-height + visible overflow safety net so a very short phone screen
+       lets the last bit of content spill/scroll into view instead of being
+       hard-clipped by the fixed height above. */
+    #panel-1 {
+      height: auto !important;
+      min-height: 100vh !important;
+      min-height: 100dvh !important;
+      overflow: visible !important;
+    }
+    #panel-1 .panel-inner {
+      height: auto !important;
+    }
+    /* No blanket .panel-inner overrides here — each panel's own base
+       (non-mobile-scoped) padding/display rules now apply on mobile too,
+       exactly like desktop (see the removed rules in git history: forcing
+       padding-top:0 and display:block here used to fight the fixed
+       104px/88px header-clearance padding and the flex-centering that
+       panels 1, 2, 7, 8, 9 and 10 rely on, since those panels are
+       intentionally excluded from the JS fit-to-screen scaler). */
+    /* Dot-nav stays on for mobile too (desktop parity) — just bigger,
+       easier-to-hit touch targets than the mouse-sized 8px dots. */
+    .dot-nav {
+      right: 12px !important;
+      gap: 13px !important;
+    }
+    .dot-nav button {
+      width: 10px !important;
+      height: 10px !important;
+    }
+    .dot-nav button.active {
+      width: 12px !important;
+      height: 12px !important;
+    }
+    .hero {
+      height: 320px !important;
+      min-height: 320px !important;
+      margin: 20px auto !important;
+      padding: 24px !important;
+      transform: none !important;
+    }
+    .hero:hover {
+      height: 320px !important;
+      transform: none !important;
+      box-shadow: 0 16px 45px rgba(0,0,0,.6) !important;
+      border-color: rgba(237,230,214,.18) !important;
+    }
+    .hero-inner {
+      align-items: flex-start !important;
+      text-align: left !important;
+    }
+    .hero h1 {
+      font-size: 32px !important;
+      line-height: 1 !important;
+      text-align: left !important;
+    }
+    .hero-sub {
+      font-size: 13px !important;
+      max-width: 100% !important;
+      text-align: left !important;
+      margin-top: 8px !important;
+    }
+    .panel1-info-group {
+      transform: none !important;
+      opacity: 1 !important;
+      filter: none !important;
+      margin-top: 20px !important;
+    }
+    .stats {
+      padding: 20px !important;
+      margin: 0 auto 16px auto !important;
+    }
+    .stats-grid {
+      grid-template-columns: 1fr 1fr !important;
+      gap: 16px !important;
+    }
+    .badges-row {
+      flex-wrap: wrap !important;
+      gap: 12px !important;
+      justify-content: center !important;
+    }
+    #panel-2 .genre-ticker-wrap,
+    #panel-7 .genre-ticker-wrap {
+      position: relative !important;
+      top: 0 !important;
+      margin-bottom: 16px !important;
+    }
+    /* NOTE: this must match (or beat) the specificity of the
+       "#panel-2.reels-active .showcase-container { display:grid !important }"
+       rules defined earlier in the stylesheet — otherwise those win outright
+       (regardless of this being inside a mobile media query) and the card +
+       info box get squeezed into a cramped two-column grid instead of
+       stacking, which is the exact "tiny video top-left, everything
+       squashed" bug seen on phones. Scoped to .reels-active only (not a
+       bare .showcase-container rule) so the billboard sub-state can still
+       hide it entirely on mobile, same as desktop. */
+    #panel-2.reels-active .showcase-container,
+    #panel-7.reels-active .showcase-container {
+      display: flex !important;
+      flex-direction: column !important;
+      gap: 20px !important;
+      height: auto !important;
+      max-height: none !important;
+      min-height: auto !important;
+      transform: none !important;
+      opacity: 1 !important;
+    }
+    .showcase-video-card {
+      height: 200px !important;
+      transform: none !important;
+    }
+    .showcase-video-card:hover {
+      transform: none !important;
+      box-shadow: none !important;
+    }
+    .showcase-info-box {
+      width: 100% !important;
+      transform: none !important;
+      padding: 24px !important;
+      box-shadow: 0 10px 30px rgba(0,0,0,.4) !important;
+    }
+    .showcase-info-box:hover {
+      transform: none !important;
+      box-shadow: 0 10px 30px rgba(0,0,0,.4) !important;
+    }
+    /* Touch taps trigger :hover and it can get "stuck" on mobile browsers,
+       which is what was making the title blur out and the card/info box
+       shrink or dim after tapping. These :has()-driven effects are
+       hover-only interactions, so neutralize them below the tablet
+       breakpoint. */
+    .work-head,
+    #panel-2:has(.showcase-video-card:hover) .work-head,
+    #panel-7:has(.showcase-video-card:hover) .work-head {
+      opacity: 1 !important;
+      filter: none !important;
+    }
+    .showcase-container:has(.showcase-video-card:hover) .showcase-info-box,
+    .showcase-container:has(.showcase-info-box:hover) .showcase-video-card {
+      opacity: 1 !important;
+      transform: none !important;
+    }
+    .showcase-title {
+      font-size: 32px !important;
+    }
+    /* Panel 2 & 7's billboard title uses .work-head h2 { font-size:
+       clamp(75px,11vw,200px) }. At phone widths 11vw is far below the
+       75px floor, so it always renders at the 75px minimum — 3-5 words
+       at 75px+ in all-caps simply don't fit a ~350px-wide screen, so
+       each word wraps to its own line and the block runs taller than
+       the screen. panel-2/7 are (by design, like panel-1) excluded from
+       the JS fit-to-screen scaler — see the un-scaled, fixed-height,
+       overflow:hidden #panel-2/#panel-7 .panel-inner rule above — so
+       there's no scale-down safety net here; the font itself has to
+       shrink enough to fit one screen, same as panel-1's hand-tuned
+       mobile sizing. */
+    .work-head h2 {
+      font-size: clamp(34px, 11vw, 56px) !important;
+      line-height: 1.05 !important;
+    }
+    /* Panel 3/4's giant-title/expanded-video morph now uses its normal
+       (desktop) clamp()-based sizing on mobile too — those clamp() values
+       are already viewport-width-relative, and fitPanelsToScreen (JS)
+       scales the whole panel-inner to fit the screen exactly like desktop,
+       so the two states stay visually distinct instead of being flattened
+       to one static look. */
+    .testimonial blockquote {
+      font-size: 22px !important;
+    }
+    .reel h2 {
+      font-size: 40px !important;
+    }
+    .reel-play {
+      margin-top: 24px !important;
+      width: 76px !important;
+      height: 76px !important;
+    }
+    .reel {
+      height: auto !important;
+      padding: 56px 0 !important;
+    }
+    .clients-head h2 {
+      font-size: 34px !important;
+    }
+    .foot-grid {
+      grid-template-columns: 1fr !important;
+      gap: 30px !important;
+      text-align: center !important;
+    }
+    .foot-col {
+      align-items: center !important;
+    }
+    .foot-bottom {
+      flex-direction: column !important;
+      gap: 15px !important;
+      text-align: center !important;
+    }
+    /* Every section already sits inside a .panel that supplies its own
+       70px/40px top/bottom padding above — without this, each <section>
+       ALSO added its own 74px top+bottom on top of that, doubling up the
+       space between every single section on mobile and making the page
+       feel like it's full of dead gaps. */
+    .panel section {
+      padding: 0 !important;
+    }
   }
-  .showcase-video-card:hover .sc-video {
-    transform: none !important;
-    filter: grayscale(.15) contrast(1.05) brightness(.85) !important;
-  }
-  .showcase-container:has(.showcase-video-card:hover) .showcase-info-box {
-    opacity: 1 !important;
-    transform: none !important;
-  }
-  .showcase-info-box:hover {
-    transform: none !important;
-    border-color: rgba(237,230,214,.16) !important;
-    box-shadow: 0 25px 60px rgba(0,0,0,.6) !important;
-    z-index: 5 !important;
-  }
-  .showcase-info-box:hover::before { opacity: 0.6 !important; }
-  .showcase-container:has(.showcase-info-box:hover) .showcase-video-card {
-    transform: none !important;
-    opacity: 1 !important;
-  }
-  /* Work-head blur when card is hovered */
-  #panel-2:has(.showcase-video-card:hover) .work-head,
-  #panel-7:has(.showcase-video-card:hover) .work-head {
-    opacity: 1 !important;
-    filter: none !important;
-  }
-  /* Statement visual hover */
-  #panel-3 .stmt-visual:hover,
-  #panel-4 .stmt-visual:hover {
-    border-color: rgba(237,230,214,.18) !important;
-    box-shadow: 0 15px 35px rgba(0,0,0,.6) !important;
-    transform: scale(0.95) translateY(-10px) !important;
-  }
-  /* Hero parallax tilt */
-  .hero:hover + .panel1-info-group,
-  #panel-1:has(.hero:hover) .panel1-info-group {
-    transform: none !important;
-    opacity: 1 !important;
-    filter: none !important;
-  }
-}
-</style>
-
-<!-- ===== MOBILE KILL-SWITCH: remove all 100vh / 100dvh height locks & tight spacing ===== -->
-<style>
-@media (max-width: 768px) {
-  html, body {
-    height: auto !important;
-    min-height: 0 !important;
-    overflow: visible !important;
-    overflow-x: hidden !important;
-  }
-
-  .snap-container,
-  div.snap-container,
-  div#snapContainer {
-    height: auto !important;
-    min-height: 0 !important;
-    max-height: none !important;
-    overflow-y: visible !important;
-    overflow: visible !important;
-    scroll-snap-type: none !important;
-    display: block !important;
-  }
-
-  /* Every panel – clean tight padding on mobile (no huge black gaps) */
-  .panel,
-  div.panel,
-  #panel-2, #panel-3, #panel-4, #panel-5,
-  #panel-7, #panel-8, #panel-9, #panel-10 {
-    height: auto !important;
-    min-height: 0 !important;
-    max-height: none !important;
-    scroll-snap-align: none !important;
-    scroll-snap-stop: normal !important;
-    overflow: visible !important;
-    display: block !important;
-    padding: 24px 16px !important;
-    filter: none !important;
-    transform: none !important;
-  }
-
-  #panel-1 {
-    height: auto !important;
-    min-height: 0 !important;
-    display: block !important;
-    padding: 68px 16px 20px !important;
-    filter: none !important;
-    transform: none !important;
-  }
-
-  .panel-inner,
-  #panel-1 .panel-inner,
-  #panel-2 .panel-inner,
-  #panel-3 .panel-inner,
-  #panel-4 .panel-inner,
-  #panel-5 .panel-inner,
-  #panel-7 .panel-inner,
-  #panel-8 .panel-inner,
-  #panel-9 .panel-inner,
-  #panel-10 .panel-inner {
-    height: auto !important;
-    min-height: 0 !important;
-    max-height: none !important;
-    width: 100% !important;
-    transform: none !important;
-    padding: 0 !important;
-    margin: 0 !important;
-    display: block !important;
-    overflow: visible !important;
-    justify-content: initial !important;
-    align-items: initial !important;
-  }
-
-  #panel-2.reels-active .panel-inner,
-  #panel-7.reels-active .panel-inner {
-    height: auto !important;
-    justify-content: initial !important;
-  }
-
-  .hud-scene-badge {
-    display: none !important;
-  }
-
-  #panel-2 .genre-ticker-wrap,
-  #panel-7 .genre-ticker-wrap {
-    position: relative !important;
-    top: auto !important;
-    z-index: 1 !important;
-    margin-bottom: 12px !important;
-  }
-
-  .showcase-container,
-  #panel-2 .showcase-container,
-  #panel-7 .showcase-container,
-  #panel-2.reels-active .showcase-container,
-  #panel-7.reels-active .showcase-container,
-  #panel-2.reels-active.reels-active .showcase-container,
-  #panel-7.reels-active.reels-active .showcase-container {
-    display: flex !important;
-    flex-direction: column !important;
-    grid-template-columns: unset !important;
-    gap: 14px !important;
-    height: auto !important;
-    min-height: 0 !important;
-    max-height: none !important;
-    transform: none !important;
-    opacity: 1 !important;
-    overflow: visible !important;
-    padding: 0 !important;
-  }
-
-  .showcase-video-card {
-    height: 200px !important;
-    width: 100% !important;
-    transform: none !important;
-  }
-  .showcase-info-box {
-    width: 100% !important;
-    height: auto !important;
-    transform: none !important;
-    padding: 16px !important;
-  }
-  .showcase-title { font-size: 24px !important; }
-  .showcase-desc  { font-size: 12px !important; line-height: 1.5 !important; margin-bottom: 12px !important; }
-  .showcase-metrics { margin-bottom: 14px !important; gap: 6px !important; }
-  .showcase-metrics span { font-size: 9px !important; padding: 4px 8px !important; }
-
-  /* Statement panels (Services & About) */
-  .statement,
-  #panel-3 .statement,
-  #panel-4 .statement {
-    height: auto !important;
-    min-height: 0 !important;
-    display: flex !important;
-    flex-direction: column !important;
-    transform: none !important;
-    padding: 0 !important;
-    gap: 14px !important;
-  }
-  .stmt-text,
-  #panel-3 .stmt-text,
-  #panel-4 .stmt-text {
-    width: 100% !important;
-    transform: none !important;
-    opacity: 1 !important;
-  }
-  .stmt-text h2,
-  #panel-3 .stmt-text h2,
-  #panel-4 .stmt-text h2,
-  #panel-3.p3-active .stmt-text h2,
-  #panel-4.p4-active .stmt-text h2 {
-    font-size: 24px !important;
-    line-height: 1.15 !important;
-  }
-  .stmt-text p.stmt-sub-desc,
-  #panel-3.p3-active .stmt-text p.stmt-sub-desc,
-  #panel-4.p4-active .stmt-text p.stmt-sub-desc {
-    font-size: 12px !important;
-    height: auto !important;
-    opacity: 1 !important;
-    transform: none !important;
-    display: block !important;
-    margin-top: 6px !important;
-  }
-  .stmt-visual,
-  #panel-3 .stmt-visual,
-  #panel-4 .stmt-visual,
-  #panel-3.p3-active .stmt-visual,
-  #panel-4.p4-active .stmt-visual {
-    width: 100% !important;
-    height: 190px !important;
-    transform: none !important;
-    opacity: 1 !important;
-    margin-top: 0 !important;
-  }
-
-  /* Reel section */
-  .reel, #panel-8 .reel { height: auto !important; padding: 20px 0 !important; }
-  .reel h2 { font-size: 28px !important; }
-  .reel-play { width: 60px !important; height: 60px !important; }
-
-  /* Hero card */
-  .hero {
-    height: 240px !important;
-    min-height: 240px !important;
-    max-height: 240px !important;
-    padding: 16px !important;
-    width: 100% !important;
-    margin: 0 auto 12px auto !important;
-  }
-  .hero h1 { font-size: 22px !important; line-height: 1.15 !important; }
-  .hero-sub { font-size: 11px !important; margin-top: 6px !important; }
-
-  /* Info group below hero (Two boxes: stats + badges) */
-  .panel1-info-group {
-    position: relative !important;
-    transform: none !important;
-    opacity: 1 !important;
-    filter: none !important;
-    width: 100% !important;
-    margin-top: 0 !important;
-    display: flex !important;
-    flex-direction: column !important;
-    gap: 8px !important;
-  }
-  .stats     { padding: 12px !important; width: 100% !important; max-width: 100% !important; margin-bottom: 0 !important; }
-  .stats-grid{ grid-template-columns: 1fr 1fr !important; gap: 8px !important; }
-  .stat-num  { font-size: 20px !important; }
-  .stat-label{ font-size: 8px !important; }
-  .badges    { width: 100% !important; max-width: 100% !important; padding: 8px !important; margin-top: 0 !important; }
-  .badges-row{ flex-wrap: wrap !important; gap: 6px !important; justify-content: center !important; }
-
-  /* Footer */
-  .foot-cta h2 { font-size: 26px !important; }
-  .foot-grid {
-    grid-template-columns: 1fr !important;
-    gap: 14px !important;
-    text-align: center !important;
-    margin-top: 16px !important;
-  }
-  .foot-col   { align-items: center !important; }
-  .foot-bottom{ flex-direction: column !important; gap: 8px !important; text-align: center !important; margin-top: 14px !important; }
-
-  /* Testimonial */
-  .testimonial { padding: 20px 0 !important; }
-  .testimonial blockquote { font-size: 16px !important; line-height: 1.5 !important; }
-
-  /* Clients */
-  .clients { padding: 20px 0 !important; }
-  .clients-head h2 { font-size: 26px !important; }
-}
 </style>
 </head>
 <body>
@@ -2379,8 +2380,7 @@
     fullnav.classList.remove('open'); menuBtn.classList.remove('active'); menuBtn.setAttribute('aria-expanded', false);
   }));
 
-  // snapContainer is now a plain div — scroll listeners use window / document.documentElement
-  const snapContainer = document.getElementById('snapContainer') || document.documentElement;
+  const snapContainer = document.getElementById('snapContainer');
 
   // ---- fit every panel's content to exactly one screen, always ----
   // Wrap each panel's real content in .panel-inner, then scale that
@@ -2397,13 +2397,9 @@
   });
 
   function fitPanelsToScreen(){
-    if (window.innerWidth <= 768) {
-      fitTargets.forEach(({panel, inner})=>{
-        inner.style.width = '100%';
-        inner.style.transform = 'none';
-      });
-      return;
-    }
+    // Runs at every width, mobile included, so a phone gets the exact same
+    // "shrink/grow content to fill one screen exactly" behavior as desktop
+    // instead of a different, unscaled layout.
     fitTargets.forEach(({panel, inner})=>{
       if(panel.id === 'panel-1') return;
       inner.style.width = '100%';
@@ -2454,6 +2450,19 @@
   }
   scheduleFit();
 
+  // ---- suppress the focus-out blur/scale/dim while a snap transition is
+  // actually in motion (see the .is-scrolling CSS override above) — only
+  // reapply it once scrolling has settled on a panel ----
+  let scrollSettleTimer = null;
+  snapContainer.classList.add('is-scrolling');
+  snapContainer.addEventListener('scroll', () => {
+    snapContainer.classList.add('is-scrolling');
+    if (scrollSettleTimer) clearTimeout(scrollSettleTimer);
+    scrollSettleTimer = setTimeout(() => {
+      snapContainer.classList.remove('is-scrolling');
+    }, 220);
+  }, {passive:true});
+
   const io = new IntersectionObserver((entries)=>{
     entries.forEach(e=>{ if(e.isIntersecting){ e.target.classList.add('in'); io.unobserve(e.target); } });
   }, {root:snapContainer, threshold:.15});
@@ -2485,7 +2494,12 @@
         const n = e.target.dataset.panel;
         dotButtons.forEach(b=> b.classList.toggle('active', b.dataset.panel === n));
 
-
+        // Lens Focus Pull Transition — now runs on every screen size, since
+        // mobile panels are full-screen one-at-a-time just like desktop.
+        panels.forEach(p => {
+          if (p === e.target) p.classList.remove('focus-out');
+          else p.classList.add('focus-out');
+        });
 
         // HUD Scene Badge Update
         if (hudNum && hudTitle) {
@@ -2789,14 +2803,20 @@
   }
 
   function updateP2State(newStep) {
-    p2Step = Math.max(1, Math.min(8, newStep));
-    p2Panel.classList.add('reels-active');
-    renderReelShowcase(p2Step - 1);
+    if (newStep === p2Step) return;
+    p2Step = Math.max(0, Math.min(8, newStep));
+
+    if (p2Step === 0) {
+      p2Panel.classList.remove('reels-active');
+    } else {
+      p2Panel.classList.add('reels-active');
+      renderReelShowcase(p2Step - 1);
+    }
   }
 
   // Handle dot clicks directly
   document.addEventListener('click', (e) => {
-    const dot = e.target.closest('#panel-2 .sc-dot');
+    const dot = e.target.closest('.sc-dot');
     if (dot) {
       const reelNum = parseInt(dot.dataset.reel, 10);
       if (reelNum >= 1 && reelNum <= 8) {
@@ -2805,95 +2825,302 @@
     }
   });
 
-  // ---- Panel 2: EIGHT REELS SCROLL ANIMATION CONTROLLER ----
-  let isP2ScrollLocked = false;
+  // Intercept scroll wheel events inside Panel 2 with 900ms lock & delta threshold
+  if (p2Panel && snapContainer) {
+    let wheelDeltaAccumulator = 0;
+    let resetDeltaTimer = null;
 
-  function stepP2Reel(direction) {
-    if (isP2ScrollLocked) return false;
-    
-    if (direction > 0) { // Scrolling DOWN
-      if (p2Step < 8) {
-        p2Step++;
-        updateP2State(p2Step);
-        isP2ScrollLocked = true;
-        setTimeout(() => { isP2ScrollLocked = false; }, 420);
-        return true; // Stepped reel, prevent native scroll
-      }
-      return false; // At reel 8, allow scrolling to Panel 3 (Our Services)
-    } else { // Scrolling UP
-      if (p2Step > 1) {
-        p2Step--;
-        updateP2State(p2Step);
-        isP2ScrollLocked = true;
-        setTimeout(() => { isP2ScrollLocked = false; }, 420);
-        return true; // Stepped reel, prevent native scroll
-      }
-      return false; // At reel 1, allow scrolling to Panel 1 (Hero)
-    }
-  }
+    snapContainer.addEventListener('wheel', (e) => {
+      const r = p2Panel.getBoundingClientRect();
+      const isP2Active = Math.abs(r.top) < window.innerHeight * 0.4;
+      if (!isP2Active) return;
 
-  // Wheel listener for Panel 2 (desktop)
-  window.addEventListener('wheel', (e) => {
-    if (!p2Panel) return;
-    const r = p2Panel.getBoundingClientRect();
-    const isP2Active = r.top <= 120 && r.bottom >= window.innerHeight * 0.55;
-    if (isP2Active) {
-      if (Math.abs(e.deltaY) > 15) {
-        const isDown = e.deltaY > 0;
-        const handled = stepP2Reel(isDown ? 1 : -1);
-        if (handled) {
+      if (isP2Transitioning) {
+        if (p2Step > 0 && p2Step < 8) {
+          e.preventDefault();
+        }
+        return;
+      }
+
+      wheelDeltaAccumulator += e.deltaY;
+
+      if (resetDeltaTimer) clearTimeout(resetDeltaTimer);
+      resetDeltaTimer = setTimeout(() => { wheelDeltaAccumulator = 0; }, 200);
+
+      if (Math.abs(wheelDeltaAccumulator) >= 40) {
+        const isScrollDown = wheelDeltaAccumulator > 0;
+        wheelDeltaAccumulator = 0;
+
+        if (isScrollDown) {
+          if (p2Step < 8) {
+            e.preventDefault();
+            isP2Transitioning = true;
+            updateP2State(p2Step + 1);
+            setTimeout(() => { isP2Transitioning = false; }, 900); // 900ms fluid lock window
+          }
+        } else {
+          if (p2Step > 0) {
+            e.preventDefault();
+            isP2Transitioning = true;
+            updateP2State(p2Step - 1);
+            setTimeout(() => { isP2Transitioning = false; }, 900); // 900ms fluid lock window
+          }
+        }
+      } else {
+        if (p2Step > 0 && p2Step < 8) {
           e.preventDefault();
         }
       }
-    }
-  }, { passive: false });
+    }, { passive: false });
 
-  // Touch listener for Panel 2 (mobile)
-  let touchP2StartY = 0;
-  if (p2Panel) {
-    p2Panel.addEventListener('touchstart', (e) => {
-      touchP2StartY = e.touches[0].clientY;
+    // Touch swipe support — mirrors the wheel gate above 1:1 so mobile
+    // gets the identical scroll-jacked step behavior as desktop. touchmove
+    // blocks native scroll while a step transition should happen instead
+    // (exactly like e.preventDefault() on wheel), and touchend commits the
+    // step once the swipe has moved far enough.
+    let touchStartY = 0;
+    snapContainer.addEventListener('touchstart', (e) => {
+      const r = p2Panel.getBoundingClientRect();
+      const isP2Active = Math.abs(r.top) < window.innerHeight * 0.4;
+      if (!isP2Active) return;
+      touchStartY = e.touches[0].clientY;
     }, { passive: true });
 
-    p2Panel.addEventListener('touchmove', (e) => {
+    snapContainer.addEventListener('touchmove', (e) => {
       const r = p2Panel.getBoundingClientRect();
-      const isP2Active = r.top <= 120 && r.bottom >= window.innerHeight * 0.55;
-      if (isP2Active) {
-        const touchCurrentY = e.touches[0].clientY;
-        const diff = touchP2StartY - touchCurrentY;
-        if (Math.abs(diff) > 35) {
-          const isDown = diff > 0;
-          const handled = stepP2Reel(isDown ? 1 : -1);
-          if (handled) {
-            e.preventDefault();
-            touchP2StartY = touchCurrentY;
-          }
-        }
+      const isP2Active = Math.abs(r.top) < window.innerHeight * 0.4;
+      if (!isP2Active) return;
+
+      const liveDiff = touchStartY - e.touches[0].clientY; // >0 = swiping up
+      if (p2Step > 0 && p2Step < 8) {
+        e.preventDefault();
+      } else if (p2Step === 0 && liveDiff > 0) {
+        e.preventDefault();
+      } else if (p2Step === 8 && liveDiff < 0) {
+        e.preventDefault();
       }
     }, { passive: false });
+
+    snapContainer.addEventListener('touchend', (e) => {
+      const r = p2Panel.getBoundingClientRect();
+      const isP2Active = Math.abs(r.top) < window.innerHeight * 0.4;
+      if (!isP2Active) return;
+      if (isP2Transitioning) return;
+
+      const touchEndY = e.changedTouches[0].clientY;
+      const diffY = touchStartY - touchEndY;
+      if (Math.abs(diffY) < 40) return;
+
+      if (diffY > 0 && p2Step < 8) { // Swipe UP (scroll down)
+        isP2Transitioning = true;
+        updateP2State(p2Step + 1);
+        setTimeout(() => { isP2Transitioning = false; }, 900);
+      } else if (diffY < 0 && p2Step > 0) { // Swipe DOWN (scroll up)
+        isP2Transitioning = true;
+        updateP2State(p2Step - 1);
+        setTimeout(() => { isP2Transitioning = false; }, 900);
+      }
+    }, { passive: true });
   }
 
   // Panel 3 Interactive Step-by-Step Scroll Controller
-  let p3Step = 1;
+  let p3Step = 0; // 0 = 2x Giant Title, 1 = Title 5x smaller + Video Card Expanded
+  let isP3Transitioning = false;
   const p3Panel = document.getElementById('panel-3');
+
   function updateP3State(newStep) {
+    if (newStep === p3Step) return;
     p3Step = Math.max(0, Math.min(1, newStep));
-    if (p3Step === 0) p3Panel.classList.remove('p3-active');
-    else p3Panel.classList.add('p3-active');
+
+    if (p3Step === 0) {
+      p3Panel.classList.remove('p3-active');
+    } else {
+      p3Panel.classList.add('p3-active');
+    }
   }
-  if (p3Panel) updateP3State(1);
+
+  // Intercept scroll wheel events inside Panel 3
+  if (p3Panel && snapContainer) {
+    let p3WheelDelta = 0;
+    let p3ResetTimer = null;
+
+    snapContainer.addEventListener('wheel', (e) => {
+      const r = p3Panel.getBoundingClientRect();
+      const isP3Active = Math.abs(r.top) < window.innerHeight * 0.4;
+      if (!isP3Active) return;
+
+      if (isP3Transitioning) {
+        if (p3Step === 0 && e.deltaY > 0) e.preventDefault();
+        if (p3Step === 1 && e.deltaY < 0) e.preventDefault();
+        return;
+      }
+
+      p3WheelDelta += e.deltaY;
+      if (p3ResetTimer) clearTimeout(p3ResetTimer);
+      p3ResetTimer = setTimeout(() => { p3WheelDelta = 0; }, 200);
+
+      if (Math.abs(p3WheelDelta) >= 40) {
+        const isScrollDown = p3WheelDelta > 0;
+        p3WheelDelta = 0;
+
+        if (isScrollDown) {
+          if (p3Step < 1) {
+            e.preventDefault();
+            isP3Transitioning = true;
+            updateP3State(1);
+            setTimeout(() => { isP3Transitioning = false; }, 900);
+          }
+          // When p3Step === 1, allow native scroll down to Panel 4!
+        } else {
+          if (p3Step > 0) {
+            e.preventDefault();
+            isP3Transitioning = true;
+            updateP3State(0);
+            setTimeout(() => { isP3Transitioning = false; }, 900);
+          }
+          // When p3Step === 0, allow native scroll up to Panel 2!
+        }
+      }
+    }, { passive: false });
+
+    // Touch equivalent of the wheel gate above, for mobile parity.
+    let p3TouchStartY = 0;
+    snapContainer.addEventListener('touchstart', (e) => {
+      const r = p3Panel.getBoundingClientRect();
+      const isP3Active = Math.abs(r.top) < window.innerHeight * 0.4;
+      if (!isP3Active) return;
+      p3TouchStartY = e.touches[0].clientY;
+    }, { passive: true });
+
+    snapContainer.addEventListener('touchmove', (e) => {
+      const r = p3Panel.getBoundingClientRect();
+      const isP3Active = Math.abs(r.top) < window.innerHeight * 0.4;
+      if (!isP3Active) return;
+      const liveDiff = p3TouchStartY - e.touches[0].clientY;
+      if (p3Step === 0 && liveDiff > 0) e.preventDefault();
+      if (p3Step === 1 && liveDiff < 0) e.preventDefault();
+    }, { passive: false });
+
+    snapContainer.addEventListener('touchend', (e) => {
+      const r = p3Panel.getBoundingClientRect();
+      const isP3Active = Math.abs(r.top) < window.innerHeight * 0.4;
+      if (!isP3Active) return;
+      if (isP3Transitioning) return;
+
+      const diffY = p3TouchStartY - e.changedTouches[0].clientY;
+      if (Math.abs(diffY) < 40) return;
+
+      if (diffY > 0) { // Swipe UP (scroll down)
+        if (p3Step < 1) {
+          isP3Transitioning = true;
+          updateP3State(1);
+          setTimeout(() => { isP3Transitioning = false; }, 900);
+        }
+      } else { // Swipe DOWN (scroll up)
+        if (p3Step > 0) {
+          isP3Transitioning = true;
+          updateP3State(0);
+          setTimeout(() => { isP3Transitioning = false; }, 900);
+        }
+      }
+    }, { passive: true });
+  }
 
   // Panel 4 Interactive Step-by-Step Scroll Controller
-  let p4Step = 1;
+  let p4Step = 0;
+  let isP4Transitioning = false;
   const p4Panel = document.getElementById('panel-4');
+
   function updateP4State(newStep) {
+    if (newStep === p4Step) return;
     p4Step = Math.max(0, Math.min(1, newStep));
     if (p4Step === 0) p4Panel.classList.remove('p4-active');
     else p4Panel.classList.add('p4-active');
   }
-  if (p4Panel) updateP4State(1);
 
-  // Panel 7 Interactive Step-by-Step Scroll Controller (4 Reels)
+  if (p4Panel && snapContainer) {
+    let p4WheelDelta = 0;
+    let p4ResetTimer = null;
+    snapContainer.addEventListener('wheel', (e) => {
+      const r = p4Panel.getBoundingClientRect();
+      const isP4Active = Math.abs(r.top) < window.innerHeight * 0.4;
+      if (!isP4Active) return;
+
+      if (isP4Transitioning) {
+        if (p4Step === 0 && e.deltaY > 0) e.preventDefault();
+        if (p4Step === 1 && e.deltaY < 0) e.preventDefault();
+        return;
+      }
+
+      p4WheelDelta += e.deltaY;
+      if (p4ResetTimer) clearTimeout(p4ResetTimer);
+      p4ResetTimer = setTimeout(() => { p4WheelDelta = 0; }, 200);
+
+      if (Math.abs(p4WheelDelta) >= 40) {
+        const isScrollDown = p4WheelDelta > 0;
+        p4WheelDelta = 0;
+        if (isScrollDown) {
+          if (p4Step < 1) {
+            e.preventDefault();
+            isP4Transitioning = true;
+            updateP4State(1);
+            setTimeout(() => { isP4Transitioning = false; }, 900);
+          }
+        } else {
+          if (p4Step > 0) {
+            e.preventDefault();
+            isP4Transitioning = true;
+            updateP4State(0);
+            setTimeout(() => { isP4Transitioning = false; }, 900);
+          }
+        }
+      }
+    }, { passive: false });
+
+    // Touch equivalent of the wheel gate above, for mobile parity.
+    let p4TouchStartY = 0;
+    snapContainer.addEventListener('touchstart', (e) => {
+      const r = p4Panel.getBoundingClientRect();
+      const isP4Active = Math.abs(r.top) < window.innerHeight * 0.4;
+      if (!isP4Active) return;
+      p4TouchStartY = e.touches[0].clientY;
+    }, { passive: true });
+
+    snapContainer.addEventListener('touchmove', (e) => {
+      const r = p4Panel.getBoundingClientRect();
+      const isP4Active = Math.abs(r.top) < window.innerHeight * 0.4;
+      if (!isP4Active) return;
+      const liveDiff = p4TouchStartY - e.touches[0].clientY;
+      if (p4Step === 0 && liveDiff > 0) e.preventDefault();
+      if (p4Step === 1 && liveDiff < 0) e.preventDefault();
+    }, { passive: false });
+
+    snapContainer.addEventListener('touchend', (e) => {
+      const r = p4Panel.getBoundingClientRect();
+      const isP4Active = Math.abs(r.top) < window.innerHeight * 0.4;
+      if (!isP4Active) return;
+      if (isP4Transitioning) return;
+
+      const diffY = p4TouchStartY - e.changedTouches[0].clientY;
+      if (Math.abs(diffY) < 40) return;
+
+      if (diffY > 0) {
+        if (p4Step < 1) {
+          isP4Transitioning = true;
+          updateP4State(1);
+          setTimeout(() => { isP4Transitioning = false; }, 900);
+        }
+      } else {
+        if (p4Step > 0) {
+          isP4Transitioning = true;
+          updateP4State(0);
+          setTimeout(() => { isP4Transitioning = false; }, 900);
+        }
+      }
+    }, { passive: true });
+  }
+
+  // Panel 7 Interactive Step-by-Step Scroll Controller
   const btsData = [
     {
       num: '01',
@@ -2929,8 +3156,8 @@
     }
   ];
 
-  let p7Step = 1;
-  let isP7ScrollLocked = false;
+  let p7Step = 0; // 0 = Billboard, 1..4 = BTS 1..4
+  let isP7Transitioning = false;
   const p7Panel = document.getElementById('panel-7');
   let btsActiveVideoSlot = 'A';
 
@@ -2981,18 +3208,24 @@
   }
 
   function updateP7State(newStep) {
-    p7Step = Math.max(1, Math.min(4, newStep));
-    p7Panel.classList.add('reels-active');
-    renderBtsShowcase(p7Step - 1);
+    if (newStep === p7Step) return;
+    p7Step = Math.max(0, Math.min(4, newStep));
+    
+    if (p7Step === 0) {
+      p7Panel.classList.remove('reels-active');
+    } else {
+      p7Panel.classList.add('reels-active');
+      renderBtsShowcase(p7Step - 1);
+    }
   }
 
-  // Handle dot clicks directly for Panel 7
+  // Handle dot clicks directly for Panel 7 (preventing bubbling to Panel 2's document listener)
   const btsDotsContainer = document.getElementById('btsDots');
   if (btsDotsContainer) {
     btsDotsContainer.addEventListener('click', (e) => {
       const dot = e.target.closest('.sc-dot');
       if (dot) {
-        e.stopPropagation();
+        e.stopPropagation(); // Prevents document listener from seeing it
         const reelNum = parseInt(dot.dataset.reel, 10);
         if (reelNum >= 1 && reelNum <= 4) {
           updateP7State(reelNum);
@@ -3001,69 +3234,88 @@
     });
   }
 
-  function stepP7Reel(direction) {
-    if (isP7ScrollLocked) return false;
-    
-    if (direction > 0) { // Scrolling DOWN
-      if (p7Step < 4) {
-        p7Step++;
-        updateP7State(p7Step);
-        isP7ScrollLocked = true;
-        setTimeout(() => { isP7ScrollLocked = false; }, 420);
-        return true;
-      }
-      return false; // At reel 4, allow scrolling down to Panel 8 (Showreel)
-    } else { // Scrolling UP
-      if (p7Step > 1) {
-        p7Step--;
-        updateP7State(p7Step);
-        isP7ScrollLocked = true;
-        setTimeout(() => { isP7ScrollLocked = false; }, 420);
-        return true;
-      }
-      return false; // At reel 1, allow scrolling up to Panel 5 (Testimonial)
-    }
-  }
-
-  // Wheel listener for Panel 7
-  window.addEventListener('wheel', (e) => {
-    if (!p7Panel) return;
-    const r = p7Panel.getBoundingClientRect();
-    const isP7Active = r.top <= 120 && r.bottom >= window.innerHeight * 0.55;
-    if (isP7Active) {
-      if (Math.abs(e.deltaY) > 15) {
-        const isDown = e.deltaY > 0;
-        const handled = stepP7Reel(isDown ? 1 : -1);
-        if (handled) {
-          e.preventDefault();
-        }
-      }
-    }
-  }, { passive: false });
-
-  // Touch listener for Panel 7
-  let touchP7StartY = 0;
-  if (p7Panel) {
-    p7Panel.addEventListener('touchstart', (e) => {
-      touchP7StartY = e.touches[0].clientY;
-    }, { passive: true });
-
-    p7Panel.addEventListener('touchmove', (e) => {
+  if (p7Panel && snapContainer) {
+    let p7WheelDelta = 0;
+    let p7ResetTimer = null;
+    snapContainer.addEventListener('wheel', (e) => {
       const r = p7Panel.getBoundingClientRect();
-      const isP7Active = r.top <= 120 && r.bottom >= window.innerHeight * 0.55;
-      if (isP7Active) {
-        const touchCurrentY = e.touches[0].clientY;
-        const diff = touchP7StartY - touchCurrentY;
-        if (Math.abs(diff) > 35) {
-          const isDown = diff > 0;
-          const handled = stepP7Reel(isDown ? 1 : -1);
-          if (handled) {
+      const isP7Active = Math.abs(r.top) < window.innerHeight * 0.4;
+      if (!isP7Active) return;
+
+      if (isP7Transitioning) {
+        if (p7Step > 0 && p7Step < 4) e.preventDefault();
+        return;
+      }
+
+      p7WheelDelta += e.deltaY;
+      if (p7ResetTimer) clearTimeout(p7ResetTimer);
+      p7ResetTimer = setTimeout(() => { p7WheelDelta = 0; }, 200);
+
+      if (Math.abs(p7WheelDelta) >= 40) {
+        const isScrollDown = p7WheelDelta > 0;
+        p7WheelDelta = 0;
+        if (isScrollDown) {
+          if (p7Step < 4) {
             e.preventDefault();
-            touchP7StartY = touchCurrentY;
+            isP7Transitioning = true;
+            updateP7State(p7Step + 1);
+            setTimeout(() => { isP7Transitioning = false; }, 900);
+          }
+        } else {
+          if (p7Step > 0) {
+            e.preventDefault();
+            isP7Transitioning = true;
+            updateP7State(p7Step - 1);
+            setTimeout(() => { isP7Transitioning = false; }, 900);
           }
         }
+      } else {
+        if (p7Step > 0 && p7Step < 4) e.preventDefault();
       }
     }, { passive: false });
+
+    // Touch equivalent of the wheel gate above, for mobile parity.
+    let p7TouchStartY = 0;
+    snapContainer.addEventListener('touchstart', (e) => {
+      const r = p7Panel.getBoundingClientRect();
+      const isP7Active = Math.abs(r.top) < window.innerHeight * 0.4;
+      if (!isP7Active) return;
+      p7TouchStartY = e.touches[0].clientY;
+    }, { passive: true });
+
+    snapContainer.addEventListener('touchmove', (e) => {
+      const r = p7Panel.getBoundingClientRect();
+      const isP7Active = Math.abs(r.top) < window.innerHeight * 0.4;
+      if (!isP7Active) return;
+      const liveDiff = p7TouchStartY - e.touches[0].clientY;
+      if (p7Step > 0 && p7Step < 4) {
+        e.preventDefault();
+      } else if (p7Step === 0 && liveDiff > 0) {
+        e.preventDefault();
+      } else if (p7Step === 4 && liveDiff < 0) {
+        e.preventDefault();
+      }
+    }, { passive: false });
+
+    snapContainer.addEventListener('touchend', (e) => {
+      const r = p7Panel.getBoundingClientRect();
+      const isP7Active = Math.abs(r.top) < window.innerHeight * 0.4;
+      if (!isP7Active) return;
+      if (isP7Transitioning) return;
+
+      const diffY = p7TouchStartY - e.changedTouches[0].clientY;
+      if (Math.abs(diffY) < 40) return;
+
+      if (diffY > 0 && p7Step < 4) {
+        isP7Transitioning = true;
+        updateP7State(p7Step + 1);
+        setTimeout(() => { isP7Transitioning = false; }, 900);
+      } else if (diffY < 0 && p7Step > 0) {
+        isP7Transitioning = true;
+        updateP7State(p7Step - 1);
+        setTimeout(() => { isP7Transitioning = false; }, 900);
+      }
+    }, { passive: true });
   }
 
   // ---- in-page anchor links: scroll within the snap container ----
@@ -3122,13 +3374,14 @@
     p1Observer.observe(panel1El);
   }
 
-  // sticky CTA appears after scrolling past hero
+  // sticky CTA appears after scrolling past hero (element is optional —
+  // guard it so a missing #stickyCta never throws and silently kills the
+  // rest of this scroll listener, e.g. the parallax update below)
   const stickyCta = document.getElementById('stickyCta');
   const heroEl = document.querySelector('.hero');
-  // Guard: both elements must exist before attaching the scroll listener
   if (stickyCta && heroEl) {
-    window.addEventListener('scroll', ()=>{
-      const past = window.scrollY > heroEl.offsetHeight * 0.8;
+    snapContainer.addEventListener('scroll', ()=>{
+      const past = snapContainer.scrollTop > heroEl.offsetHeight * 0.8;
       stickyCta.classList.toggle('show', past);
     }, {passive:true});
   }
@@ -3162,18 +3415,9 @@
     });
   }
   if(!reduceMotion){
-    window.addEventListener('scroll', updateParallax, {passive:true});
+    snapContainer.addEventListener('scroll', updateParallax, {passive:true});
     updateParallax();
   }
-
-  // ---- Initialize all showcase panels on load ----
-  // Now that wheel-step navigation is removed, all devices use normal scroll.
-  // Advance panels 2, 3, 4 and 7 to their "active" states immediately so
-  // content is visible without any user interaction required.
-  requestAnimationFrame(() => {
-    if (typeof updateP2State === 'function') updateP2State(1);
-    if (typeof updateP7State === 'function') updateP7State(1);
-  });
 </script>
 
 </body>
